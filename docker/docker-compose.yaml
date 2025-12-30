@@ -1,0 +1,4 @@
+include:
+  - ./n8n_automation/docker-compose.yaml
+networks:
+  pipelines:
