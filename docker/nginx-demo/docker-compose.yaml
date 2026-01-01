@@ -1,0 +1,15 @@
+---
+services:
+  nginx-demo:
+    container_name: nginx-demo1
+    image: nginx:latest
+    networks:
+      - frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx-http.rule=Host('nginx.kkulich.com')
+      - traefik.http.routers.nginx-http.entrypoints=web
+    restart: unless-stopped
+networks:
+  frontend:
+    external: true
