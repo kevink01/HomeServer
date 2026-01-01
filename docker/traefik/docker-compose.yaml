@@ -3,6 +3,8 @@ services:
   traefik:
     image: traefik:v3.6.6
     container_name: traefik
+    labels:
+      - net.unraid.docker.icon='https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png'
     ports:
       - '80:80'
       - '443:443'
