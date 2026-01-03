@@ -1,5 +1,5 @@
 include:
-  - ./n8n_automation/docker-compose.yaml
+  - ./n8n/docker-compose.yaml
   - ./traefik/docker-compose.yaml
 networks:
   pipelines:

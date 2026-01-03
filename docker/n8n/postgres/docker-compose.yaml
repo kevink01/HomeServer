@@ -1,0 +1,21 @@
+services:
+  n8n_postgres:
+    image: postgres:18
+    container_name: n8n_postgres
+    restart: unless-stopped
+    pids_limit: 2048
+    networks:
+      - n8n
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql:rw
+    labels:
+      net.unraid.docker.managed: "dockerman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/Skylinar/unraid_templates/refs/heads/main/images/postgresql.png?raw=true"
+
+networks:
+  n8n:
+    external: true

@@ -1,0 +1,3 @@
+include:
+  - ./web/docker-compose.yaml
+  - ./postgres/docker-compose.yaml

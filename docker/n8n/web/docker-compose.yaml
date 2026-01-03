@@ -1,0 +1,23 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n_web
+    restart: always
+    labels:
+      net.unraid.docker.icon: 'https://raw.githubusercontent.com/kevink01/HomeServer/main/logos/n8n.png'
+      net.unraid.docker.webui: 'https://n8n.kkulich.com'
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - n8n
+
+volumes:
+  n8n_data:
+    name: n8n_kevink_n8n_data
+networks:
+  n8n:
+    external: true
