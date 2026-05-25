@@ -1,23 +1,47 @@
 ---
 services:
   traefik:
-    image: traefik:v3.6.6
+    image: traefik:v3.7
     container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
     labels:
       - net.unraid.docker.icon='https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png'
-    ports:
-      - '80:80'
-      - '443:443'
-      - '8080:8080'
+      # Enable self‑routing
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.dashboard.tls.certresolver=cloudflare"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.kkulich.com`) || Host(`www.traefik.kkulich.com`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.domains[0].main=traefik.kkulich.com"
+      - "traefik.http.routers.dashboard.tls.domains[0].sans=www.traefik.kkulich.com"
+
+      # Tekton dashboard
+      - "traefik.http.routers.tekton-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.tekton-dashboard.rule=Host(`tekton.kkulich.com`) || Host(`www.tekton.kkulich.com`)"
+      - "traefik.http.routers.tekton-dashboard.tls=true"
+      - "traefik.http.routers.tekton-dashboard.tls.certresolver=cloudflare"
+      - "traefik.http.routers.tekton-dashboard.service=tekton-dashboard-service@docker"
+      - "traefik.http.services.tekton-dashboard-service.loadbalancer.server.url=http://192.168.49.2:32485"
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - /mnt/user/appdata/traefik/traefik_logs.log:/var/traefik/traefik_logs.log:rw
+      - /mnt/user/appdata/traefik/data/certs/:/var/traefik/certs/:rw
     networks:
-      - frontend
-      - backend
+      - proxy
+      - minikube
     restart: unless-stopped
 networks:
-  frontend:
+  proxy:
     external: true
-  backend:
+  minikube:
     external: true
+    name: minikube
