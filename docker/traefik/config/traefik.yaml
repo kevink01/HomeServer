@@ -3,15 +3,43 @@ global:
   sendAnonymousUsage: false
 log:
   level: DEBUG
+accessLog:
+  format: json
+  filters:
+    statusCodes:
+      - "200"
+      - "400-404"
+      - "500-503"
+  fields:
+    names:
+      ClientUsername: drop
+    headers:
+      defaultMode: keep
+      names:
+        User-Agent: redact
+        Content-Type: keep
 api:
   dashboard: true
-  insecure: true
-entry:
+  insecure: false
+entryPoints:
   web:
     address: :80
   websecure:
     address: :443
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: "klpv733@gmail.com"
+      storage: /var/traefik/certs/cloudflare-acme.json
+      caServer: 'https://acme-v02.api.letsencrypt.org/directory'
+      keyType: EC256
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
 providers:
   docker:
-    endpoint: 'unix:///var/run/docker.sock'
+    endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    network: proxy
