@@ -1,0 +1,18 @@
+services:
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    volumes:
+      # Mounts the host Docker daemon so the runner can spawn job containers
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      # Mounts a local volume to persist runner registration configuration
+      - '/mnt/user/appdata/gitlab/runners/config/:/etc/gitlab-runner'
+    networks:
+      - gitlab
+      - proxy
+networks:
+  gitlab:
+    external: true
+  proxy:
+    external: true

@@ -1,0 +1,28 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    env_file: .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/user/appdata/homepage/config:/app/config
+    networks:
+      - proxy
+    environment:
+      PUID: $PUID
+      PGID: $PGID
+    labels:
+      traefik.enable: true
+      traefik.http.routers.homepage.tls: true
+      traefik.http.routers.homepage.tls.certresolver: "cloudflare"
+      traefik.http.routers.homepage.rule: "Host(`homepage.kkulich.dev`) || Host(`www.homepage.kkulich.dev`)"
+      traefik.http.routers.homepage.entrypoints: "websecure"
+      traefik.http.services.homepage.loadbalancer.server.port: 3000
+      traefik.http.routers.homepage.tls.domains[0].main: "www.homepage.kkulich.dev"
+      traefik.http.routers.homepage.tls.domains[0].sans: "homepage.kkulich.dev"
+networks:
+  proxy:
+    external: true

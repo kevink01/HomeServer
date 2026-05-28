@@ -14,16 +14,16 @@ services:
 
       # Dashboard router
       - "traefik.http.routers.dashboard.tls.certresolver=cloudflare"
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.kkulich.com`) || Host(`www.traefik.kkulich.com`)"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.kkulich.dev`) || Host(`www.traefik.kkulich.dev`)"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.domains[0].main=traefik.kkulich.com"
-      - "traefik.http.routers.dashboard.tls.domains[0].sans=www.traefik.kkulich.com"
+      - "traefik.http.routers.dashboard.tls.domains[0].main=traefik.kkulich.dev"
+      - "traefik.http.routers.dashboard.tls.domains[0].sans=www.traefik.kkulich.dev"
 
       # Tekton dashboard
       - "traefik.http.routers.tekton-dashboard.entrypoints=websecure"
-      - "traefik.http.routers.tekton-dashboard.rule=Host(`tekton.kkulich.com`) || Host(`www.tekton.kkulich.com`)"
+      - "traefik.http.routers.tekton-dashboard.rule=Host(`tekton.kkulich.dev`) || Host(`www.tekton.kkulich.dev`)"
       - "traefik.http.routers.tekton-dashboard.tls=true"
       - "traefik.http.routers.tekton-dashboard.tls.certresolver=cloudflare"
       - "traefik.http.routers.tekton-dashboard.service=tekton-dashboard-service@docker"
