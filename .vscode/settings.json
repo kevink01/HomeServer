@@ -1,0 +1,9 @@
+{
+	"[yaml]": {
+		"prettier.singleQuote": false
+	},
+	"files.associations": {
+		"docker-compose.yaml": "yaml",
+		"docker-compose.*.yaml": "yaml"
+	}
+}

@@ -1,7 +1,21 @@
 services:
   postgresql:
+    # Core definition
+    image: docker.io/library/postgres:18.4-alpine
+    container_name: authentik_postgres
+    annotations:
+      - authentik
+      - postgres
+    labels:
+      - test=user
+    networks:
+      - authentik:internal
+    restart: unless-stopped
+    volumes:
+      - authentik_database:/var/lib/postgresql/data
+    # Environment settings
     env_file:
-    - .env
+      - .env
     environment:
       POSTGRES_DB: ${PG_DB:-authentik}
       POSTGRES_PASSWORD: ${PG_PASS:?database password required}
@@ -11,57 +25,82 @@ services:
       retries: 5
       start_period: 20s
       test:
-      - CMD-SHELL
-      - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+        - CMD-SHELL
+        - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       timeout: 5s
-    image: docker.io/library/postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-    - authentik_database:/var/lib/postgresql/data
   server:
-    command: server
+    # Core definition
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.0}
+    container_name: authentik_server
     depends_on:
       postgresql:
         condition: service_healthy
-    env_file:
-    - .env
-    environment:
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.0}
+    annotations:
+      - authentik
+      - server
+    labels:
+      - test=user
+    networks:
+      - authentik:internal
     ports:
-    - ${COMPOSE_PORT_HTTP:-9000}:9000
-    - ${COMPOSE_PORT_HTTPS:-9443}:9443
+      - ${COMPOSE_PORT_HTTP:-9000}:9000
+      - ${COMPOSE_PORT_HTTPS:-9443}:9443
     restart: unless-stopped
-    shm_size: 512mb
     volumes:
-    - /mnt/user/appdata/authentik/data:/data
-    - /mnt/user/appdata/authentik/custom-templates:/templates
-  worker:
-    command: worker
-    depends_on:
-      postgresql:
-        condition: service_healthy
+      - /mnt/user/appdata/authentik/data:/data
+      - /mnt/user/appdata/authentik/custom-templates:/templates
+    # Environment settings
+    command: server
     env_file:
-    - .env
+      - .env
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
+    shm_size: 512mb
+  worker:
+    # Core settings
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.5.0}
+    container_name: authentik_worker
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    annotations:
+      - authentik
+      - worker
     restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/user/appdata/authentik/data:/data
+      - /mnt/user/appdata/authentik/certs:/certs
+      - /mnt/user/appdata/authentik/custom-templates:/templates
+    # Environment settings
+    command: worker
+    env_file:
+      - .env
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: postgresql
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
     shm_size: 512mb
     user: root
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - /mnt/user/appdata/authentik/data:/data
-    - /mnt/user/appdata/authentik/certs:/certs
-    - /mnt/user/appdata/authentik/custom-templates:/templates
 volumes:
   authentik_database:
     driver: local
+
+networks:
+  "authentik:internal":
+    name: "authentik:internal"
+    driver: bridge
+    external: false
+    enable_ipv6: false
+    attachable: false
+  "authentik:traefik":
+    name: "authentik:traefik"
+    driver: bridge
+    external: false
+    attachable: true
