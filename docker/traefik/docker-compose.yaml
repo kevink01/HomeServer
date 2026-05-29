@@ -3,12 +3,14 @@ services:
   traefik:
     image: traefik:v3.7
     container_name: traefik
+    annotations:
+      -
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     labels:
-      - net.unraid.docker.icon='https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png'
+      - "net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
       # Enable self‑routing
       - "traefik.enable=true"
 
@@ -36,12 +38,26 @@ services:
       - /mnt/user/appdata/traefik/traefik_logs.log:/var/traefik/traefik_logs.log:rw
       - /mnt/user/appdata/traefik/data/certs/:/var/traefik/certs/:rw
     networks:
-      - proxy
-      - minikube
+      - authentik:traefik
+      - code-server:traefik
+      - gitlab:traefik
+      - homepage:traefik
+      - immich:traefik
+      - n8n:traefik
+      - ollama:traefik
     restart: unless-stopped
 networks:
-  proxy:
+  "authentik:traefik":
     external: true
-  minikube:
+  "code-server:traefik":
     external: true
-    name: minikube
+  "gitlab:traefik":
+    external: true
+  "homepage:traefik":
+    external: true
+  "immich:traefik":
+    external: true
+  "n8n:traefik":
+    external: true
+  "ollama:traefik":
+    external: true

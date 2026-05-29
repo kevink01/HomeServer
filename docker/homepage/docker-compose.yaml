@@ -3,26 +3,33 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     restart: unless-stopped
+    hostname: homepage.kkulich.dev
+    networks:
+      - homepage:traefik
     ports:
       - 3000:3000
-    env_file: .env
+    labels:
+      traefik.enable: true
+      traefik.http.routers.homepage.entrypoints: websecure
+      traefik.http.routers.homepage.tls: true
+      traefik.http.routers.homepage.tls.certresolver: cloudflare
+      traefik.http.routers.homepage.rule: Host(`homepage.kkulich.dev`) || Host(`www.homepage.kkulich.dev`)
+      traefik.http.routers.homepage.tls.domains[0].main: www.homepage.kkulich.dev
+      traefik.http.routers.homepage.tls.domains[0].sans: homepage.kkulich.dev
+      traefik.http.routers.homepage.service: homepage_service
+      traefik.http.services.homepage_service.loadbalancer.server.scheme: http
+      traefik.http.services.homepage_service.loadbalancer.server.port: 3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /mnt/user/appdata/homepage/config:/app/config
-    networks:
-      - proxy
+    # Environment settings
+    env_file: .env
     environment:
       PUID: $PUID
       PGID: $PGID
-    labels:
-      traefik.enable: true
-      traefik.http.routers.homepage.tls: true
-      traefik.http.routers.homepage.tls.certresolver: "cloudflare"
-      traefik.http.routers.homepage.rule: "Host(`homepage.kkulich.dev`) || Host(`www.homepage.kkulich.dev`)"
-      traefik.http.routers.homepage.entrypoints: "websecure"
-      traefik.http.services.homepage.loadbalancer.server.port: 3000
-      traefik.http.routers.homepage.tls.domains[0].main: "www.homepage.kkulich.dev"
-      traefik.http.routers.homepage.tls.domains[0].sans: "homepage.kkulich.dev"
 networks:
-  proxy:
+  "homepage:traefik":
+    name: "authentik:traefik"
+    driver: bridge
     external: true
+    attachable: true

@@ -1,10 +1,9 @@
 name: immich
 services:
   immich-machine-learning:
-    container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    container_name: immich_machine_learning
+    restart: always
     labels:
       net.unraid.docker.icon: "https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.png"
     # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
@@ -12,13 +11,12 @@ services:
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where app>
     volumes:
       - immich_machine_learning_cache:/cache
+    networks:
+      - immich:internal
+    healthcheck:
+      disable: true
     env_file:
       - .env
-    networks:
-      - immich
-    restart: always
-    healthcheck:
-      disable: false
   redis:
     container_name: immich_redis
     image: docker.io/valkey/valkey:9@sha256:fb8d272e529ea567b9bf1302245796f21a2672b8368ca3fcb938ac334e613c8f
@@ -38,16 +36,24 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_DATABASE_NAME}
-      POSTGRES_INITDB_ARGS: '--data-checksums'
+      POSTGRES_INITDB_ARGS: "--data-checksums"
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
       # DB_STORAGE_TYPE: 'HDD'
     volumes:
       # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     networks:
-      - immich
+      - immich:internal
     shm_size: 128mb
     restart: always
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 5s
+      test:
+        - CMD-SHELL
+        - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      timeout: 5s
   immich-ui:
     container_name: immich_ui
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}

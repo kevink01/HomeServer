@@ -1,5 +1,0 @@
-include:
-  - ./n8n/docker-compose.yaml
-  - ./traefik/docker-compose.yaml
-networks:
-  pipelines:
