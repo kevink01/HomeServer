@@ -11,7 +11,7 @@ services:
     labels:
       - test=user
     networks:
-      - authentik:internal
+      - authentik_internal
     restart: unless-stopped
     volumes:
       - authentik_database:/var/lib/postgresql
@@ -43,7 +43,7 @@ services:
     labels:
       - test=user
     networks:
-      - authentik:internal
+      - authentik_internal
     ports:
       - ${COMPOSE_PORT_HTTP:-9000}:9000
       - ${COMPOSE_PORT_HTTPS:-9443}:9443
@@ -72,6 +72,8 @@ services:
     annotations:
       - authentik
       - worker
+    networks:
+      - authentik_internal
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -96,14 +98,15 @@ volumes:
     name: authentik_database
 
 networks:
-  "authentik:internal":
-    name: "authentik:internal"
+  authentik_internal:
+    name: authentik_internal
     driver: bridge
     external: false
     enable_ipv6: false
     attachable: false
-  "authentik:traefik":
-    name: "authentik:traefik"
+  authentik_traefik:
+    name: authentik_traefik
     driver: bridge
     external: false
+    enable_ipv6: true
     attachable: true

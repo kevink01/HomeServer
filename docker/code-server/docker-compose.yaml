@@ -15,8 +15,8 @@ services:
       traefik.http.services.vscode_service.loadbalancer.server.scheme: http
       traefik.http.services.vscode_service.loadbalancer.server.port: 8443
     networks:
-      - code:internal
-      - code:traefik
+      - code_internal
+      - code_traefik
     ports:
       - 9500:8443
     restart: unless-stopped
@@ -25,14 +25,15 @@ services:
     env_file:
       - .env
 networks:
-  "code:internal":
-    name: "code:internal"
+  code_internal:
+    name: code_internal
     driver: bridge
-    external: true
+    external: false
     enable_ipv6: false
     attachable: false
-  "code:traefik":
-    name: "authentik:traefik"
+  code_traefik:
+    name: code_traefik
     driver: bridge
-    external: true
+    external: false
+    enable_ipv6: true
     attachable: true
