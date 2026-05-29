@@ -1,3 +1,5 @@
+---
+name: authentik
 services:
   postgresql:
     # Core definition
@@ -91,6 +93,7 @@ services:
 volumes:
   authentik_database:
     driver: local
+    name: authentik_database
 
 networks:
   "authentik:internal":
