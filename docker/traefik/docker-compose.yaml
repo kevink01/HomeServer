@@ -46,16 +46,16 @@ services:
     restart: unless-stopped
 networks:
   "authentik:traefik":
-    external: true
+    external: false
   "code-server:traefik":
-    external: true
+    external: false
   "gitlab:traefik":
-    external: true
+    external: false
   "homepage:traefik":
-    external: true
+    external: false
   "immich:traefik":
-    external: true
+    external: false
   "n8n:traefik":
-    external: true
+    external: false
   "ollama:traefik":
-    external: true
+    external: false
