@@ -12,7 +12,7 @@ services:
       - authentik:internal
     restart: unless-stopped
     volumes:
-      - authentik_database:/var/lib/postgresql/data
+      - authentik_database:/var/lib/postgresql
     # Environment settings
     env_file:
       - .env
