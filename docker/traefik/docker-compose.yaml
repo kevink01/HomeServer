@@ -3,8 +3,6 @@ services:
   traefik:
     image: traefik:v3.7
     container_name: traefik
-    annotations:
-      -
     ports:
       - "80:80"
       - "443:443"

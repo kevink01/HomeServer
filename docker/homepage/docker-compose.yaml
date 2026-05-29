@@ -29,7 +29,7 @@ services:
       PGID: $PGID
 networks:
   "homepage:traefik":
-    name: "authentik:traefik"
+    name: "homepage:traefik"
     driver: bridge
     external: true
     attachable: true
