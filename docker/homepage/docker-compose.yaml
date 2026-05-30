@@ -1,3 +1,4 @@
+name: homepage
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
@@ -5,7 +6,7 @@ services:
     restart: unless-stopped
     hostname: homepage.kkulich.dev
     networks:
-      - homepage:traefik
+      - homepage_traefik
     ports:
       - 3000:3000
     labels:
@@ -13,9 +14,9 @@ services:
       traefik.http.routers.homepage.entrypoints: websecure
       traefik.http.routers.homepage.tls: true
       traefik.http.routers.homepage.tls.certresolver: cloudflare
-      traefik.http.routers.homepage.rule: Host(`homepage.kkulich.dev`) || Host(`www.homepage.kkulich.dev`)
       traefik.http.routers.homepage.tls.domains[0].main: www.homepage.kkulich.dev
       traefik.http.routers.homepage.tls.domains[0].sans: homepage.kkulich.dev
+      traefik.http.routers.homepage.rule: Host(`homepage.kkulich.dev`) || Host(`www.homepage.kkulich.dev`)
       traefik.http.routers.homepage.service: homepage_service
       traefik.http.services.homepage_service.loadbalancer.server.scheme: http
       traefik.http.services.homepage_service.loadbalancer.server.port: 3000
@@ -28,8 +29,9 @@ services:
       PUID: $PUID
       PGID: $PGID
 networks:
-  "homepage:traefik":
-    name: "homepage:traefik"
+  homepage_traefik:
+    name: homepage_traefik
     driver: bridge
-    external: true
-    attachable: true
+    external: false
+    enable_ipv6: false
+    attachable: false

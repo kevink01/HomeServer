@@ -6,8 +6,8 @@ services:
     restart: unless-stopped
     hostname: gitlab.kkulich.dev
     networks:
-      - gitlab:internal
-      - gitlab:traefik
+      - gitlab_internal
+      - gitlab_traefik
     ports:
       - 2424:22
     labels:
@@ -50,14 +50,15 @@ services:
         registry_nginx['redirect_http_to_https'] = true
     shm_size: 256m
 networks:
-  "gitlab:internal":
-    name: "code:internal"
+  gitlab_internal:
+    name: gitlab_internal
     driver: bridge
-    external: true
+    external: false
     enable_ipv6: false
     attachable: false
-  "gitlab:traefik":
-    name: "authentik:traefik"
+  gitlab_traefik:
+    name: gitlab:traefik
     driver: bridge
-    external: true
+    external: false
+    enable_ipv6: true
     attachable: true
