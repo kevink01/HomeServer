@@ -1,50 +1,61 @@
 name: n8n
 services:
   n8n_postgres:
-    image: postgres:18
+    image: docker.io/library/postgres:18.4-alpine
     container_name: n8n_postgres
     restart: unless-stopped
     pids_limit: 2048
     networks:
-      - n8n
+      - n8n_internal
     ports:
-      - "5432:5432"
-    env_file:
-      - .env
+      - 5432:5432
+    labels:
+      net.unraid.docker.managed: dockerman
+      net.unraid.docker.icon: https://raw.githubusercontent.com/Skylinar/unraid_templates/refs/heads/main/images/postgresql.png?raw=true
     volumes:
       - ${POSTGRES_DATA_PATH}:/var/lib/postgresql:rw
-    labels:
-      net.unraid.docker.managed: "dockerman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/Skylinar/unraid_templates/refs/heads/main/images/postgresql.png?raw=true"
-  n8n:
+    # Environment settings
+    env_file:
+      - .env
+  n8n_web:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n_web
     restart: always
     labels:
-      net.unraid.docker.icon: 'https://raw.githubusercontent.com/kevink01/HomeServer/main/logos/n8n.png'
-      net.unraid.docker.webui: 'https://n8n.kkulich.dev'
+      net.unraid.docker.icon: https://raw.githubusercontent.com/kevink01/HomeServer/main/logos/n8n.png
+      net.unraid.docker.webui: https://n8n.kkulich.dev
       traefik.enable: true
-
-      # Dashboard router
-      traefik.http.routers.n8n_ui.tls.certresolver: "cloudflare"
-      traefik.http.routers.n8n_ui.rule: "Host(`n8n.kkulich.dev`) || Host(`www.n8n.kkulich.dev`)"
-      traefik.http.routers.n8n_ui.entrypoints: "websecure"
+      traefik.http.routers.n8n_ui.entrypoints: websecure
       traefik.http.routers.n8n_ui.tls: true
-      traefik.http.routers.n8n_ui.tls.domains[0].main: "www.n8n.kkulich.dev"
-      traefik.http.routers.n8n_ui.tls.domains[0].sans: "n8n.kkulich.dev"
-      traefik.docker.network: "proxy"
+      traefik.http.routers.n8n_ui.tls.certresolver: cloudflare
+      traefik.http.routers.n8n_ui.rule: Host(`n8n.kkulich.dev`) || Host(`www.n8n.kkulich.dev`)
+      traefik.http.routers.n8n_ui.tls.domains[0].main: www.n8n.kkulich.dev
+      traefik.http.routers.n8n_ui.tls.domains[0].sans: n8n.kkulich.dev
+      traefik.docker.network: n8n_traefik
+      traefik.http.services.vscode_service.loadbalancer.server.scheme: http
+      traefik.http.services.vscode_service.loadbalancer.server.port: 5678
+    networks:
+      - n8n_internal
+      - n8n_traefik
+    volumes:
+      - n8n_database:/home/node/.n8n
+    # Environment settings
     env_file:
       - .env
-    volumes:
-      - n8n_data:/home/node/.n8n
-    networks:
-      - n8n
-      - proxy
 volumes:
-  n8n_data:
-    name: n8n_kevink_n8n_data
+  n8n_database:
+    driver: local
+    name: n8n_database
 networks:
-  n8n:
-    external: true
-  proxy:
-    external: true
+  n8n_internal:
+    name: n8n_internal
+    driver: bridge
+    external: false
+    enable_ipv6: false
+    attachable: false
+  n8n_traefik:
+    name: n8n_traefik
+    driver: bridge
+    external: false
+    enable_ipv6: true
+    attachable: true
