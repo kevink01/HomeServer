@@ -7,6 +7,14 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+        reservations:
+          memory: 64M
+    memswap_limit: -1
     labels:
       - "net.unraid.docker.icon=https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
       # Enable self‑routing
@@ -36,26 +44,29 @@ services:
       - /mnt/user/appdata/traefik/traefik_logs.log:/var/traefik/traefik_logs.log:rw
       - /mnt/user/appdata/traefik/data/certs/:/var/traefik/certs/:rw
     networks:
-      - authentik:traefik
-      - code-server:traefik
-      - gitlab:traefik
-      - homepage:traefik
-      - immich:traefik
-      - n8n:traefik
-      - ollama:traefik
+      #- authentik:traefik
+      - code_traefik
+      #- gitlab:traefik
+      - homepage_traefik
+      #- immich:traefik
+      #- n8n:traefik
+      #- ollama:traefik
+      - uptime_kuma_traefik
     restart: unless-stopped
 networks:
-  "authentik:traefik":
-    external: false
-  "code-server:traefik":
-    external: false
-  "gitlab:traefik":
-    external: false
-  "homepage:traefik":
-    external: false
-  "immich:traefik":
-    external: false
-  "n8n:traefik":
-    external: false
-  "ollama:traefik":
-    external: false
+  #"authentik:traefik":
+    #external: true
+  code_traefik:
+    external: true
+  #"gitlab:traefik":
+    #external: true
+  homepage_traefik:
+    external: true
+  #"immich:traefik":
+    #external: true
+  #"n8n:traefik":
+    #external: true
+ #"ollama:traefik":
+    #external: true
+  uptime_kuma_traefik:
+    external: true

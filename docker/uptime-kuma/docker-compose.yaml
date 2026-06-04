@@ -1,0 +1,42 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: always
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+        limits:
+          memory: 512M
+          cpus: '0.25'
+    memswap_limit: -1
+    volumes:
+      - /mnt/user/appdata/uptime-kuma/:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - uptime_kuma_traefik
+    healthcheck:
+      test: ["CMD", "node", "extra/healthcheck.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      traefik.enable: true
+      traefik.http.routers.uptime-kuma.entrypoints: websecure
+      traefik.http.routers.uptime-kuma.tls: true
+      traefik.http.routers.uptime-kuma.tls.certresolver: cloudflare
+      traefik.http.routers.uptime-kuma.rule: Host(`uptime.kkulich.dev`) || Host(`www.uptime.kkulich.dev`)
+      traefik.http.routers.uptime-kuma.tls.domains[0].main: www.uptime.kkulich.dev
+      traefik.http.routers.uptime-kuma.tls.domains[0].sans: uptime.kkulich.dev
+      traefik.http.routers.uptime-kuma.service: uptime-kuma_service
+      traefik.http.services.uptime-kuma_service.loadbalancer.server.scheme: http
+      traefik.http.services.uptime-kuma_service.loadbalancer.server.port: 3001
+
+networks:
+  uptime_kuma_traefik:
+    external: false
+    name: uptime_kuma_traefik
+
+volumes:
+  uptime-kuma-data:

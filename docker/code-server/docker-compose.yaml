@@ -11,9 +11,17 @@ services:
       traefik.http.routers.vscode.rule: Host(`code.kkulich.dev`) || Host(`www.code.kkulich.dev`)
       traefik.http.routers.vscode.tls.domains[0].main: www.code.kkulich.dev
       traefik.http.routers.vscode.tls.domains[0].sans: code.kkulich.dev
-      traefik.http.routers.vscode.server: vscode_service
+      traefik.http.routers.vscode.service: vscode_service
       traefik.http.services.vscode_service.loadbalancer.server.scheme: http
       traefik.http.services.vscode_service.loadbalancer.server.port: 8443
+    deploy:
+      resources:
+        reservations:
+          memory: 512M
+        limits:
+          memory: 3G
+          cpus: '1.5'
+    memswap_limit: -1
     networks:
       - code_internal
       - code_traefik

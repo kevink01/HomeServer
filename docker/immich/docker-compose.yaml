@@ -22,6 +22,14 @@ services:
     image: docker.io/valkey/valkey:9@sha256:fb8d272e529ea567b9bf1302245796f21a2672b8368ca3fcb938ac334e613c8f
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.png
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          memory: 256M
+    memswap_limit: -1
     healthcheck:
       test: redis-cli ping || exit 1
     networks:
@@ -61,8 +69,8 @@ services:
     healthcheck:
       disable: false
     networks:
-      - immich
-      - proxy
+      - immich_internal
+      - immich_traefik
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.png
       net.unraid.docker.webui: www.immich.kkulich.dev

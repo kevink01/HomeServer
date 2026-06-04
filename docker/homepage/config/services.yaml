@@ -1,0 +1,18 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Network:
+    - Traefik:
+          icon: si-traefikproxy
+          href: {{HOMEPAGE_VAR_TRAEFIK_URL}}
+          description: Traefik dashboard
+          showStats: true
+    - "Uptime Kuma":
+          icon: uptime-kuma.svg
+          href: {{HOMEPAGE_VAR_UPTIME_KUMA_URL}}
+          description: uptime status
+          widget:
+              type: uptimekuma
+              url: {{HOMEPAGE_VAR_UPTIME_KUMA_URL}}
+              slug: home

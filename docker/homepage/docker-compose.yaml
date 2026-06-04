@@ -5,6 +5,14 @@ services:
     container_name: homepage
     restart: unless-stopped
     hostname: homepage.kkulich.dev
+    deploy:
+      resources:
+        reservations:
+          memory: 64M
+        limits:
+          memory: 256M
+          cpus: '0.25'
+    memswap_limit: -1
     networks:
       - homepage_traefik
     ports:
@@ -22,7 +30,7 @@ services:
       traefik.http.services.homepage_service.loadbalancer.server.port: 3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/user/appdata/homepage/config:/app/config
+      - ./config/:/app/config
     # Environment settings
     env_file: .env
     environment:

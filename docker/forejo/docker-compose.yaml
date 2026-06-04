@@ -1,0 +1,20 @@
+services:
+  server:
+    image: codeberg.org/forgejo/forgejo:15
+    container_name: forgejo
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    networks:
+      - forejo_traefik
+    volumes:
+      - /mnt/user/appdata/forejo:/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '4000:3000'
+      - '222:22'
+networks:
+  forejo_traefik:
+    external: false
+    name: forejo_traefik
