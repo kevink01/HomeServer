@@ -101,6 +101,28 @@ resource "uptimekuma_monitor_http" "forgejo" {
   ]
 }
 
+resource "uptimekuma_monitor_docker" "forgejo" {
+  name             = "Forgejo WebUI"
+  description      = "Monitor Forgejo docker container"
+  docker_host_id   = var.docker_default_host
+  docker_container = "forgejo"
+  interval         = 60
+  max_retries      = 2
+  notification_ids = [var.notification_discord]
+  parent           = uptimekuma_monitor_group.forgejo_webui.id
+  tags = [
+    {
+      tag_id = var.tag_cicd_id
+    },
+    {
+      tag_id = uptimekuma_tag.forgejo.id
+    },
+    {
+      tag_id = var.tag_docker_id
+    }
+  ]
+}
+
 resource "uptimekuma_monitor_postgres" "forgejo" {
   name                       = "Forgejo (PostgreSQL)"
   database_connection_string = "postgres://${var.forgejo_database_user}:${var.forgejo_database_password}@${var.forgejo_database_hostname}:${var.forgejo_database_port}/${var.forgejo_database_name}"
@@ -120,6 +142,28 @@ resource "uptimekuma_monitor_postgres" "forgejo" {
     },
     {
       tag_id = var.tag_postgresql_id
+    }
+  ]
+}
+
+resource "uptimekuma_monitor_docker" "forgejo_postgres" {
+  name             = "Forgejo PostgreSQL (Docker)"
+  description      = "Monitor Forgejo PostgreSQL docker container"
+  docker_host_id   = var.docker_default_host
+  docker_container = "forgejo_postgres"
+  interval         = 60
+  max_retries      = 2
+  notification_ids = [var.notification_discord]
+  parent           = uptimekuma_monitor_group.forgejo_db.id
+  tags = [
+    {
+      tag_id = var.tag_cicd_id
+    },
+    {
+      tag_id = uptimekuma_tag.forgejo.id
+    },
+    {
+      tag_id = var.tag_docker_id
     }
   ]
 }
