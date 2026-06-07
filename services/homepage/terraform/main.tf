@@ -1,6 +1,8 @@
-# -------------------------------------------------------------- #
-# | Tags                                                       | #
-# -------------------------------------------------------------- #
+##################################################################
+## ------------------------------------------------------------ ##
+## | Tags                                                     | ##
+## ------------------------------------------------------------ ##
+##################################################################
 
 resource "uptimekuma_tag" "homepage" {
   name  = "Homepage"
@@ -8,9 +10,12 @@ resource "uptimekuma_tag" "homepage" {
 }
 
 
-# -------------------------------------------------------------- #
-# | Monitor Groups                                             | #
-# -------------------------------------------------------------- #
+##################################################################
+## ------------------------------------------------------------ ##
+## | Monitors Groups                                          | ##
+## ------------------------------------------------------------ ##
+##################################################################
+
 
 resource "uptimekuma_monitor_group" "homepage" {
   name   = "Homepage"
@@ -21,6 +26,12 @@ resource "uptimekuma_monitor_group" "homepage" {
     }
   ]
 }
+
+# ============================================================== #
+# -------------------------------------------------------------- #
+# | Monitors                                                   | #
+# -------------------------------------------------------------- #
+# ============================================================== #
 
 resource "uptimekuma_monitor_ping" "homepage" {
   name = "Homepage (Ping)"
@@ -57,6 +68,25 @@ resource "uptimekuma_monitor_http" "homepage" {
     },
     {
       tag_id = var.tag_http_id
+    }
+  ]
+}
+
+resource "uptimekuma_monitor_docker" "homepage" {
+  name             = "Homepage (Docker)"
+  description      = "Monitor Homepage docker container"
+  docker_host_id   = var.docker_default_host
+  docker_container = "homepage"
+  interval         = 60
+  max_retries      = 2
+  notification_ids = [var.notification_discord]
+  parent           = uptimekuma_monitor_group.forgejo.id
+  tags = [
+    {
+      tag_id = uptimekuma_tag.homepage.id
+    },
+    {
+      tag_id = var.tag_docker_id
     }
   ]
 }

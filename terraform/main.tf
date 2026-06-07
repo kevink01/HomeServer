@@ -37,8 +37,10 @@ module "homepage" {
   homepage_endpoint    = var.homepage_endpoint
   tag_ping_id          = module.uptime-kuma.tag_ping_id
   tag_http_id          = module.uptime-kuma.tag_http_id
+  tag_docker_id = module.uptime-kuma.tag_docker_id
   group_tools_id       = module.uptime-kuma.group_tools_id
   notification_discord = module.uptime-kuma.notification_discord
+  docker_default_host = module.uptime-kuma.docker_default_host_id
 }
 
 module "traefik" {
