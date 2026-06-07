@@ -14,6 +14,11 @@ output "tag_postgresql_id" {
   value = uptimekuma_tag.postgresql.id
 }
 
+output "tag_docker_id" {
+  value = uptimekuma_tag.docker.id
+}
+
+
 output "tag_critical_id" {
   value = uptimekuma_tag.critical.id
 }
@@ -53,4 +58,12 @@ output "group_network_id" {
 
 output "group_tools_id" {
   value = uptimekuma_monitor_group.tools.id
+}
+
+# -------------------------------------------------------------- #
+# | Docker host                                                | #
+# -------------------------------------------------------------- #
+
+output "docker_default_host_id" {
+  value = uptimekuma_docker_host.docker_default_host.id
 }

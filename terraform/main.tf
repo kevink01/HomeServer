@@ -17,9 +17,11 @@ module "code_server" {
 module "forgejo" {
   source               = "../services/forgejo/terraform"
   forgejo_endpoint     = var.forgejo_endpoint
+  docker_default_host = module.uptime-kuma.docker_default_host_id
   tag_ping_id          = module.uptime-kuma.tag_ping_id
   tag_http_id          = module.uptime-kuma.tag_http_id
   tag_postgresql_id = module.uptime-kuma.tag_postgresql_id
+  tag_docker_id = module.uptime-kuma.tag_docker_id
   tag_cicd_id = module.uptime-kuma.tag_cicd_id
   group_cicd_id       = module.uptime-kuma.group_cicd_id
   notification_discord = module.uptime-kuma.notification_discord

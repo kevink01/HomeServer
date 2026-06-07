@@ -3,6 +3,11 @@ variable "forgejo_endpoint" {
   nullable = false
 }
 
+variable "docker_default_host" {
+  type= string
+  nullable = false
+}
+
 variable "tag_http_id" {
   type = number
 }
@@ -12,6 +17,10 @@ variable "tag_ping_id" {
 }
 
 variable "tag_postgresql_id" {
+  type = number
+}
+
+variable "tag_docker_id" {
   type = number
 }
 

@@ -23,6 +23,11 @@ resource "uptimekuma_tag" "postgresql" {
   color ="#2f6792"
 } 
 
+resource "uptimekuma_tag" "docker" {
+  name = "Docker"
+  color ="#2597ee"
+} 
+
 resource "uptimekuma_tag" "critical" {
   name  = "Critical"
   color = "#ad0909"
@@ -105,6 +110,16 @@ resource "uptimekuma_monitor_ping" "gitlab" {
       tag_id : uptimekuma_tag.cicd.id
     }
   ]
+}
+
+# -------------------------------------------------------------- #
+# | Docker host                                                | #
+# -------------------------------------------------------------- #
+
+resource "uptimekuma_docker_host" "docker_default_host" {
+  name          = "Docker Host"
+  docker_daemon = "unix:///var/run/docker.sock"
+  docker_type   = "socket"
 }
 
 # -------------------------------------------------------------- #
