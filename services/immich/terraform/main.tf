@@ -49,7 +49,7 @@ resource "uptimekuma_monitor_group" "immich_db" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     }
   ]
 }
@@ -81,7 +81,7 @@ resource "uptimekuma_monitor_ping" "immich" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     },
     {
       tag_id = var.tag_ping_id
@@ -102,7 +102,7 @@ resource "uptimekuma_monitor_http" "immich" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     },
     {
       tag_id = var.tag_http_id
@@ -124,7 +124,7 @@ resource "uptimekuma_monitor_docker" "immich" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     },
     {
       tag_id = var.tag_docker_id
@@ -151,7 +151,7 @@ resource "uptimekuma_monitor_postgres" "immich" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     },
     {
       tag_id = var.tag_postgresql_id
@@ -173,7 +173,7 @@ resource "uptimekuma_monitor_docker" "immich_postgres" {
       tag_id = var.tag_media_id
     },
     {
-      tag_id = tuptimekuma_tag.immich.id
+      tag_id = uptimekuma_tag.immich.id
     },
     {
       tag_id = var.tag_docker_id

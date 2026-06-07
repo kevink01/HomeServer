@@ -46,12 +46,14 @@ services:
       POSTGRES_DB: ${DB_DATABASE_NAME}
       POSTGRES_INITDB_ARGS: --data-checksums
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
-      # DB_STORAGE_TYPE: 'HDD'
+      DB_STORAGE_TYPE: 'HDD'
     volumes:
       # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - immich_internal
+      - uptime_postgres_network
     shm_size: 128mb
     restart: always
     healthcheck:
@@ -94,6 +96,7 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis
       - database
@@ -113,5 +116,7 @@ networks:
     external: false
     enable_ipv6: true
     attachable: true
+  uptime_postgres_network:
+    external: true
 volumes:
   immich_machine_learning_cache:
