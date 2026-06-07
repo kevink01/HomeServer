@@ -21,6 +21,11 @@ module "forgejo" {
   tag_http_id          = module.uptime-kuma.tag_http_id
   group_cicd_id       = module.uptime-kuma.group_cicd_id
   notification_discord = module.uptime-kuma.notification_discord
+  forgejo_database_hostname = var.forgejo_database_hostname
+  forgejo_database_port = var.forgejo_database_port
+  forgejo_database_user = var.forgejo_database_user
+  forgejo_database_password = var.forgejo_database_password
+  forgejo_database_name = var.forgejo_database_name
 }
 
 module "homepage" {
