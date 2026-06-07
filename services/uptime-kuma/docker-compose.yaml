@@ -24,6 +24,7 @@ services:
       retries: 3
     labels:
       traefik.enable: true
+      traefik.docker.network: uptime_kuma_traefik
       traefik.http.routers.uptime-kuma.entrypoints: websecure
       traefik.http.routers.uptime-kuma.tls: true
       traefik.http.routers.uptime-kuma.tls.certresolver: cloudflare
