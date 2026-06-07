@@ -56,6 +56,7 @@ services:
       - .env
     networks:
       - forgejo_internal
+      - uptime_postgres_network
     volumes:
       - /mnt/user/appdata/forgejo/postgres/:/var/lib/postgresql
 networks:
@@ -65,3 +66,5 @@ networks:
   forgejo_internal:
     external: false
     name: forgejo_internal
+  uptime_postgres_network:
+    external: true

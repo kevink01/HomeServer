@@ -16,6 +16,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - uptime_kuma_traefik
+      - uptime_postgres_network
     healthcheck:
       test: ["CMD", "node", "extra/healthcheck.js"]
       interval: 30s
@@ -37,6 +38,9 @@ networks:
   uptime_kuma_traefik:
     external: false
     name: uptime_kuma_traefik
+  uptime_postgres_network:
+    external: false
+    name: uptime_postgres_network
 
 volumes:
   uptime-kuma-data:
