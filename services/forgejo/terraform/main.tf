@@ -129,7 +129,7 @@ resource "uptimekuma_monitor_docker" "forgejo_runner" {
   name             = "Forgejo Runner"
   description      = "Monitor Forgejo CI/CD runner"
   docker_host_id   = var.docker_default_host
-  docker_container = "forgjo-runner"
+  docker_container = "forgejo-runner"
   interval         = 60
   max_retries      = 2
   notification_ids = [var.notification_discord]
@@ -151,7 +151,7 @@ resource "uptimekuma_monitor_docker" "forgejo_dind" {
   name             = "Forgejo Docker-in-Docker"
   description      = "Monitor Forgejo DinD service"
   docker_host_id   = var.docker_default_host
-  docker_container = "forgjo-dind"
+  docker_container = "forgejo-dind"
   interval         = 60
   max_retries      = 2
   notification_ids = [var.notification_discord]

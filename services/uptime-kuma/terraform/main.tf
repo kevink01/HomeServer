@@ -118,7 +118,7 @@ resource "uptimekuma_monitor_ping" "gitlab" {
 
 resource "uptimekuma_docker_host" "docker_default_host" {
   name          = "Docker Host"
-  docker_daemon = "unix:///var/run/docker.sock"
+  docker_daemon = "/var/run/docker.sock"
   docker_type   = "socket"
 }
 
