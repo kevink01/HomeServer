@@ -8,6 +8,16 @@
 # | Tags                                                       | #
 # -------------------------------------------------------------- #
 
+resource "uptimekuma_tag" "http" {
+  name = "HTTP"
+  color = "#005b9c"
+}
+
+resource "uptimekuma_tag" "ping" {
+  name = "ping"
+  color = "#000000"
+}
+
 resource "uptimekuma_tag" "critical" {
   name  = "Critical"
   color = "#ad0909"
@@ -88,26 +98,6 @@ resource "uptimekuma_monitor_ping" "gitlab" {
   tags = [
     {
       tag_id : uptimekuma_tag.cicd.id
-    }
-  ]
-}
-
-resource "uptimekuma_monitor_ping" "homepage" {
-  name = "Homepage"
-
-  #Hostname: Target hostname or IP address (string, required for ping/port monitors)
-  hostname = "www.homepage.kkulich.dev"
-
-  interval         = 60
-  timeout          = 30
-  max_retries      = 2
-  retry_interval   = 60
-  packet_size      = 56
-  notification_ids = [uptimekuma_notification_discord.discord_notification.id]
-  parent           = uptimekuma_monitor_group.tools.id
-  tags = [
-    {
-      tag_id : uptimekuma_tag.tools.id
     }
   ]
 }

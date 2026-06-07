@@ -1,10 +1,27 @@
-output "tag_cicd_id" {
-  value = uptimekuma_tag.cicd.id
+# -------------------------------------------------------------- #
+# | Tag                                                        | #
+# -------------------------------------------------------------- #
+
+output "tag_http_id" {
+  value = uptimekuma_tag.http.id
+}
+
+output "tag_ping_id" {
+  value = uptimekuma_tag.ping.id
 }
 
 output "tag_critical_id" {
   value = uptimekuma_tag.critical.id
 }
+
+output "tag_cicd_id" {
+  value = uptimekuma_tag.cicd.id
+}
+
+output "tag_networking_id" {
+  value = uptimekuma_tag.networking.id
+}
+
 
 output "tag_tools_id" {
   value = uptimekuma_tag.tools.id
@@ -22,6 +39,14 @@ output "notification_discord" {
 # | Monitor Groups                                             | #
 # -------------------------------------------------------------- #
 
+output "group_cicd_id" {
+  value = uptimekuma_monitor_group.cicd.id
+}
+
 output "group_network_id" {
   value = uptimekuma_monitor_group.network.id
+}
+
+output "group_tools_id" {
+  value = uptimekuma_monitor_group.tools.id
 }

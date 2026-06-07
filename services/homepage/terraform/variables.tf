@@ -1,4 +1,4 @@
-variable "traefik_endpoint" {
+variable "homepage_endpoint" {
   type     = string
   nullable = false
 }
@@ -11,11 +11,7 @@ variable "tag_ping_id" {
   type = number
 }
 
-variable "tag_critical_id" {
-  type = number
-}
-
-variable "group_network_id" {
+variable "group_tools_id" {
   type = number
 }
 

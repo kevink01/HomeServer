@@ -41,6 +41,9 @@ resource "uptimekuma_monitor_ping" "traefik" {
       tag_id = uptimekuma_tag.traefik.id
     },
     {
+      tag_id = var.tag_ping_id
+    },
+    {
       tag_id : var.tag_critical_id
     }
   ]
@@ -56,6 +59,9 @@ resource "uptimekuma_monitor_http" "traefik" {
   tags = [
     {
       tag_id = uptimekuma_tag.traefik.id
+    },
+    {
+      tag_id = var.tag_http_id
     },
     {
       tag_id : var.tag_critical_id
