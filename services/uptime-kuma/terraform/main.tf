@@ -18,6 +18,11 @@ resource "uptimekuma_tag" "ping" {
   color = "#000000"
 }
 
+resource "uptimekuma_tag" "postgresql" {
+  name = "PostgreSQL"
+  color ="#2f6792"
+} 
+
 resource "uptimekuma_tag" "critical" {
   name  = "Critical"
   color = "#ad0909"
@@ -55,7 +60,7 @@ resource "uptimekuma_notification_discord" "discord_notification" {
 # | Monitor Groups                                             | #
 # -------------------------------------------------------------- #
 resource "uptimekuma_monitor_group" "network" {
-  name = "Networking services"
+  name = "Network"
   tags = [
     {
       tag_id = uptimekuma_tag.critical.id

@@ -11,6 +11,14 @@ variable "tag_ping_id" {
   type = number
 }
 
+variable "tag_postgresql_id" {
+  type = number
+}
+
+variable "tag_cicd_id" {
+  type = number
+}
+
 variable "group_cicd_id" {
   type = number
 }

@@ -10,6 +10,10 @@ output "tag_ping_id" {
   value = uptimekuma_tag.ping.id
 }
 
+output "tag_postgresql_id" {
+  value = uptimekuma_tag.postgresql.id
+}
+
 output "tag_critical_id" {
   value = uptimekuma_tag.critical.id
 }

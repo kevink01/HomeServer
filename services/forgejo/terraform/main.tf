@@ -17,6 +17,9 @@ resource "uptimekuma_monitor_group" "forgejo" {
   parent = var.group_cicd_id
   tags = [
     {
+      tag_id = var.tag_cicd_id
+    },
+    {
       tag_id = uptimekuma_tag.forgejo.id
     }
   ]
@@ -27,6 +30,9 @@ resource "uptimekuma_monitor_group" "forgejo_webui" {
   parent = uptimekuma_monitor_group.forgejo.id
   tags = [
     {
+      tag_id = var.tag_cicd_id
+    },
+    {
       tag_id = uptimekuma_tag.forgejo.id
     }
   ]
@@ -36,6 +42,9 @@ resource "uptimekuma_monitor_group" "forgejo_db" {
   name   = "Forgejo (PostgreSQL)"
   parent = uptimekuma_monitor_group.forgejo.id
   tags = [
+    {
+      tag_id = var.tag_cicd_id
+    },
     {
       tag_id = uptimekuma_tag.forgejo.id
     }
@@ -60,6 +69,9 @@ resource "uptimekuma_monitor_ping" "forgejo" {
   parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
+      tag_id = var.tag_cicd_id
+    },
+    {
       tag_id = uptimekuma_tag.forgejo.id
     },
     {
@@ -77,6 +89,9 @@ resource "uptimekuma_monitor_http" "forgejo" {
   notification_ids = [var.notification_discord]
   parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
+    {
+      tag_id = var.tag_cicd_id
+    },
     {
       tag_id = uptimekuma_tag.forgejo.id
     },
@@ -96,4 +111,15 @@ resource "uptimekuma_monitor_postgres" "forgejo" {
   active                     = true
   notification_ids = [var.notification_discord]
   parent           = uptimekuma_monitor_group.forgejo_db.id
+  tags = [
+    {
+      tag_id = var.tag_cicd_id
+    },
+    {
+      tag_id = uptimekuma_tag.forgejo.id
+    },
+    {
+      tag_id = var.tag_postgresql_id
+    }
+  ]
 }

@@ -19,6 +19,8 @@ module "forgejo" {
   forgejo_endpoint     = var.forgejo_endpoint
   tag_ping_id          = module.uptime-kuma.tag_ping_id
   tag_http_id          = module.uptime-kuma.tag_http_id
+  tag_postgresql_id = module.uptime-kuma.tag_postgresql_id
+  tag_cicd_id = module.uptime-kuma.tag_cicd_id
   group_cicd_id       = module.uptime-kuma.group_cicd_id
   notification_discord = module.uptime-kuma.notification_discord
   forgejo_database_hostname = var.forgejo_database_hostname
