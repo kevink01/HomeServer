@@ -1,2 +1,5 @@
 .env
 .env_*
+**/secret.auto.tfvars
+**/.terraform/
+**/.terraform.lock.hcl

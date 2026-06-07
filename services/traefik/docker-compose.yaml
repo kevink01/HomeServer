@@ -46,6 +46,7 @@ services:
     networks:
       #- authentik:traefik
       - code_traefik
+      - forgejo_traefik
       #- gitlab:traefik
       - homepage_traefik
       #- immich:traefik
@@ -57,6 +58,8 @@ networks:
   #"authentik:traefik":
     #external: true
   code_traefik:
+    external: true
+  forgejo_traefik:
     external: true
   #"gitlab:traefik":
     #external: true
