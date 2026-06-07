@@ -4,6 +4,11 @@
 code_server_endpoint = "www.code.kkulich.dev"
 
 # -------------------------------------------------- #
+# | Forgejo                                        | #
+# -------------------------------------------------- #
+forgejo_endpoint = "www.forgejo.kkulich.dev"
+
+# -------------------------------------------------- #
 # | Homepage                                       | #
 # -------------------------------------------------- #
 homepage_endpoint = "www.homepage.kkulich.dev"

@@ -7,10 +7,19 @@ module "uptime-kuma" {
 
 module "code_server" {
   source               = "../services/code-server/terraform"
-  code_server_endpoint    = var.code_server_endpoint
+  code_server_endpoint = var.code_server_endpoint
   tag_ping_id          = module.uptime-kuma.tag_ping_id
   tag_http_id          = module.uptime-kuma.tag_http_id
   group_tools_id       = module.uptime-kuma.group_tools_id
+  notification_discord = module.uptime-kuma.notification_discord
+}
+
+module "forgejo" {
+  source               = "../services/forgejo/terraform"
+  forgejo_endpoint     = var.forgejo_endpoint
+  tag_ping_id          = module.uptime-kuma.tag_ping_id
+  tag_http_id          = module.uptime-kuma.tag_http_id
+  group_cicd_id       = module.uptime-kuma.group_cicd_id
   notification_discord = module.uptime-kuma.notification_discord
 }
 
