@@ -69,13 +69,13 @@ resource "uptimekuma_monitor_ping" "forgejo" {
 }
 
 resource "uptimekuma_monitor_http" "forgejo" {
-  name     = "Forgejo (HTTP)"
-  url      = "https://${var.forgejo_endpoint}"
-  interval = 60
-  timeout  = 10
-  active   = true
+  name             = "Forgejo (HTTP)"
+  url              = "https://${var.forgejo_endpoint}"
+  interval         = 60
+  timeout          = 10
+  active           = true
   notification_ids = [var.notification_discord]
-  parent   = uptimekuma_monitor_group.forgejo_webui.id
+  parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
       tag_id = uptimekuma_tag.forgejo.id
@@ -87,15 +87,10 @@ resource "uptimekuma_monitor_http" "forgejo" {
 }
 
 resource "uptimekuma_monitor_postgres" "forgejo" {
-  name              = "Forgejo (PostgreSQL)"
-  hostname          = var.forgejo_database_hostname
-  port              = var.forgejo_database_port
-  database_user     = var.forgejo_database_user
-  database_password = var.forgejo_database_password
-  database_name     = var.forgejo_database_name
-  interval          = 300
-  timeout           = 10
-  max_retries       = 2
-  active            = true
-  sql_query         = "SELECT 1"
+  name                       = "Forgejo (PostgreSQL)"
+  database_connection_string = "postgres://${var.forgejo_database_user}:${var.forgejo_database_password}@${var.forgejo_database_hostname}:${var.forgejo_database_port}/${var.forgejo_database_name}"
+  interval                   = 300
+  timeout                    = 10
+  max_retries                = 2
+  active                     = true
 }
