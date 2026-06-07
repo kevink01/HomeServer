@@ -8,23 +8,18 @@
 # | Tags                                                       | #
 # -------------------------------------------------------------- #
 
-resource "uptimekuma_tag" "production" {
-  name  = "production"
-  color = "#034efc"
-}
-
-resource "uptimekuma_tag" "staging" {
-  name  = "staging"
-  color = "#128a3a"
-}
-
 resource "uptimekuma_tag" "critical" {
-  name  = "critical"
+  name  = "Critical"
   color = "#ad0909"
 }
 
-resource "uptimekuma_tag" "monitoring" {
-  name  = "monitoring"
+resource "uptimekuma_tag" "networking" {
+  name  = "Networking"
+  color = "#128a3a"
+}
+
+resource "uptimekuma_tag" "tools" {
+  name  = "Tools"
   color = "#cc8f0c"
 }
 
@@ -53,9 +48,6 @@ resource "uptimekuma_monitor_group" "network" {
   name = "Networking services"
   tags = [
     {
-      tag_id = uptimekuma_tag.production.id
-    },
-    {
       tag_id = uptimekuma_tag.critical.id
     }
   ]
@@ -64,9 +56,6 @@ resource "uptimekuma_monitor_group" "network" {
 resource "uptimekuma_monitor_group" "cicd" {
   name = "CI/CD"
   tags = [
-    {
-      tag_id = uptimekuma_tag.production.id
-    },
     {
       tag_id = uptimekuma_tag.cicd.id
     }
@@ -77,7 +66,7 @@ resource "uptimekuma_monitor_group" "tools" {
   name = "Tools"
   tags = [
     {
-      tag_id = uptimekuma_tag.production.id
+      tag_id = uptimekuma_tag.tools.id
     }
   ]
 }
@@ -97,9 +86,6 @@ resource "uptimekuma_monitor_ping" "gitlab" {
   notification_ids = [uptimekuma_notification_discord.discord_notification.id]
   parent           = uptimekuma_monitor_group.cicd.id
   tags = [
-    {
-      tag_id : uptimekuma_tag.production.id
-    },
     {
       tag_id : uptimekuma_tag.cicd.id
     }
@@ -121,10 +107,7 @@ resource "uptimekuma_monitor_ping" "homepage" {
   parent           = uptimekuma_monitor_group.tools.id
   tags = [
     {
-      tag_id : uptimekuma_tag.production.id
-    },
-    {
-      tag_id : uptimekuma_tag.monitoring.id
+      tag_id : uptimekuma_tag.tools.id
     }
   ]
 }

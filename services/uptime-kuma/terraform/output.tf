@@ -6,8 +6,8 @@ output "tag_critical_id" {
   value = uptimekuma_tag.critical.id
 }
 
-output "tag_monitoring_id" {
-  value = uptimekuma_tag.monitoring.id
+output "tag_tools_id" {
+  value = uptimekuma_tag.tools.id
 }
 
 # -------------------------------------------------------------- #
