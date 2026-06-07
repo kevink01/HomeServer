@@ -54,6 +54,43 @@ variable "homepage_endpoint" {
 }
 
 # -------------------------------------------------- #
+# | Immich                                         | #
+# -------------------------------------------------- #
+
+variable "immich_endpoint" {
+  type     = string
+  nullable = false
+}
+
+variable "immich_database_hostname" {
+  type      = string
+  nullable  = false
+  sensitive = true
+}
+
+variable "immich_database_port" {
+  type     = number
+  nullable = false
+}
+
+variable "immich_database_user" {
+  type      = string
+  nullable  = false
+  sensitive = true
+}
+
+variable "immich_database_password" {
+  type      = string
+  nullable  = false
+  sensitive = true
+}
+
+variable "immich_database_name" {
+  type     = string
+  nullable = false
+}
+
+# -------------------------------------------------- #
 # | Traefik                                        | #
 # -------------------------------------------------- #
 

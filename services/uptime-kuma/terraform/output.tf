@@ -33,6 +33,9 @@ output "tag_networking_id" {
   value = uptimekuma_tag.networking.id
 }
 
+output "tag_media_id" {
+  value = uptimekuma_tag.media.id
+}
 
 output "tag_tools_id" {
   value = uptimekuma_tag.tools.id
@@ -60,6 +63,10 @@ output "group_cicd_id" {
 
 output "group_network_id" {
   value = uptimekuma_monitor_group.network.id
+}
+
+output "group_media_id" {
+  value = uptimekuma_monitor_group.media.id
 }
 
 output "group_tools_id" {

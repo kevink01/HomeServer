@@ -16,6 +16,13 @@ forgejo_database_name = "forgejo"
 homepage_endpoint = "www.homepage.kkulich.dev"
 
 # -------------------------------------------------- #
+# | Immich                                         | #
+# -------------------------------------------------- #
+immich_endpoint      = "www.forgejo.kkulich.dev"
+immich_database_port = 5432
+immich_database_name = "immich"
+
+# -------------------------------------------------- #
 # | Traefik                                        | #
 # -------------------------------------------------- #
 traefik_endpoint = "www.traefik.kkulich.dev"

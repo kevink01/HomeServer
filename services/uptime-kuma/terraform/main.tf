@@ -34,6 +34,11 @@ resource "uptimekuma_tag" "networking" {
   color = "#128a3a"
 }
 
+resource "uptimekuma_tag" "media" {
+  name  = "Media"
+  color = "#18c249"
+}
+
 resource "uptimekuma_tag" "tools" {
   name  = "Tools"
   color = "#cc8f0c"
@@ -79,6 +84,15 @@ resource "uptimekuma_monitor_group" "cicd" {
   tags = [
     {
       tag_id = uptimekuma_tag.cicd.id
+    }
+  ]
+}
+
+resource "uptimekuma_monitor_group" "media" {
+  name = "Media"
+  tags = [
+    {
+      tag_id = uptimekuma_tag.media.id
     }
   ]
 }

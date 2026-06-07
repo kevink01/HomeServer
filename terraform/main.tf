@@ -43,6 +43,24 @@ module "homepage" {
   docker_default_host  = module.uptime-kuma.docker_default_host_id
 }
 
+module "immich" {
+  source                    = "../services/immich/terraform"
+  immich_endpoint           = var.immich_endpoint
+  docker_default_host       = module.uptime-kuma.docker_default_host_id
+  tag_ping_id               = module.uptime-kuma.tag_ping_id
+  tag_http_id               = module.uptime-kuma.tag_http_id
+  tag_postgresql_id         = module.uptime-kuma.tag_postgresql_id
+  tag_docker_id             = module.uptime-kuma.tag_docker_id
+  tag_media_id               = module.uptime-kuma.tag_media_id
+  group_media_id             = module.uptime-kuma.group_media_id
+  notification_discord      = module.uptime-kuma.notification_discord
+  immich_database_hostname = var.immich_database_hostname
+  immich_database_port     = var.immich_database_port
+  immich_database_user     = var.immich_database_user
+  immich_database_password = var.immich_database_password
+  immich_database_name     = var.immich_database_name
+}
+
 module "traefik" {
   source               = "../services/traefik/terraform"
   traefik_endpoint     = var.traefik_endpoint
