@@ -4,3 +4,10 @@ module "uptime-kuma" {
   uptime_kuma_username = var.uptime_kuma_username
   uptime_kuma_password = var.uptime_kuma_password
 }
+
+module "traefik" {
+  source               = "../services/traefik/terraform"
+  tag_critical_id = module.uptime-kuma.tag_critical_id
+  group_network_id = module.uptime-kuma.group_network_id
+  notification_discord = module.uptime-kuma.notification_discord
+}

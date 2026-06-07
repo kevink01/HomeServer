@@ -86,29 +86,6 @@ resource "uptimekuma_monitor_group" "tools" {
 # | Monitors                                                   | #
 # -------------------------------------------------------------- #
 
-resource "uptimekuma_monitor_ping" "traefik" {
-  name = "Traefik"
-
-  #Hostname: Target hostname or IP address (string, required for ping/port monitors)
-  hostname = "www.traefik.kkulich.dev"
-
-  interval         = 60
-  timeout          = 30
-  max_retries      = 2
-  retry_interval   = 60
-  packet_size      = 56
-  notification_ids = [uptimekuma_notification_discord.discord_notification.id]
-  parent           = uptimekuma_monitor_group.network.id
-  tags = [
-    {
-      tag_id : uptimekuma_tag.production.id
-    },
-    {
-      tag_id : uptimekuma_tag.critical.id
-    }
-  ]
-}
-
 resource "uptimekuma_monitor_ping" "gitlab" {
   name             = "GitLab"
   hostname         = "www.gitlab.kkulich.dev"
@@ -169,10 +146,6 @@ resource "uptimekuma_status_page" "home_status_page" {
       name   = "Production Services"
       weight = 1
       monitor_list = [
-        {
-          id       = uptimekuma_monitor_ping.traefik.id
-          send_url = true
-        },
         {
           id       = uptimekuma_monitor_ping.gitlab.id
           send_url = true
