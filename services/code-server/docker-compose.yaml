@@ -5,12 +5,13 @@ services:
     container_name: code-server
     labels:
       traefik.enable: true
+      traefik.docker.network: code_traefik
       traefik.http.routers.vscode.entrypoints: websecure
       traefik.http.routers.vscode.tls: true
       traefik.http.routers.vscode.tls.certresolver: cloudflare
-      traefik.http.routers.vscode.rule: Host(`code.kkulich.dev`) || Host(`www.code.kkulich.dev`)
       traefik.http.routers.vscode.tls.domains[0].main: www.code.kkulich.dev
       traefik.http.routers.vscode.tls.domains[0].sans: code.kkulich.dev
+      traefik.http.routers.vscode.rule: Host(`code.kkulich.dev`) || Host(`www.code.kkulich.dev`)
       traefik.http.routers.vscode.service: vscode_service
       traefik.http.services.vscode_service.loadbalancer.server.scheme: http
       traefik.http.services.vscode_service.loadbalancer.server.port: 8443

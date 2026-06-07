@@ -5,6 +5,15 @@ module "uptime-kuma" {
   uptime_kuma_password = var.uptime_kuma_password
 }
 
+module "code_server" {
+  source               = "../services/code-server/terraform"
+  code_server_endpoint    = var.code_server_endpoint
+  tag_ping_id          = module.uptime-kuma.tag_ping_id
+  tag_http_id          = module.uptime-kuma.tag_http_id
+  group_tools_id       = module.uptime-kuma.group_tools_id
+  notification_discord = module.uptime-kuma.notification_discord
+}
+
 module "homepage" {
   source               = "../services/homepage/terraform"
   homepage_endpoint    = var.homepage_endpoint
