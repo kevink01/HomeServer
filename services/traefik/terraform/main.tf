@@ -12,8 +12,8 @@ resource "uptimekuma_tag" "traefik" {
 # | Monitor Groups                                             | #
 # -------------------------------------------------------------- #
 resource "uptimekuma_monitor_group" "traefik" {
-  name = "Traefik"
-  parent           = var.group_network_id
+  name   = "Traefik"
+  parent = var.group_network_id
   tags = [
     {
       tag_id = uptimekuma_tag.traefik.id
@@ -27,7 +27,7 @@ resource "uptimekuma_monitor_group" "traefik" {
 resource "uptimekuma_monitor_ping" "traefik" {
   name = "Traefik (Ping)"
 
-  hostname = "www.traefik.kkulich.dev"
+  hostname = var.traefik_endpoint
 
   interval         = 60
   timeout          = 30
@@ -48,11 +48,11 @@ resource "uptimekuma_monitor_ping" "traefik" {
 
 resource "uptimekuma_monitor_http" "traefik" {
   name     = "Traefik (HTTP)"
-  url      = "https://www.traefik.kkulich.dev"
+  url      = "https://${var.traefik_endpoint}"
   interval = 60
   timeout  = 10
   active   = true
-  parent           = uptimekuma_monitor_group.traefik.id
+  parent   = uptimekuma_monitor_group.traefik.id
   tags = [
     {
       tag_id = uptimekuma_tag.traefik.id

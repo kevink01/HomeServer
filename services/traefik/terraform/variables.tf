@@ -1,3 +1,8 @@
+variable "traefik_endpoint" {
+  type     = string
+  nullable = false
+}
+
 variable "tag_critical_id" {
   type = number
 }
