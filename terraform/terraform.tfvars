@@ -7,6 +7,8 @@ code_server_endpoint = "www.code.kkulich.dev"
 # | Forgejo                                        | #
 # -------------------------------------------------- #
 forgejo_endpoint = "www.forgejo.kkulich.dev"
+forgejo_database_port = 5432
+forgejo_database_name = "forgejo"
 
 # -------------------------------------------------- #
 # | Homepage                                       | #

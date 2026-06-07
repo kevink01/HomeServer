@@ -22,6 +22,30 @@ resource "uptimekuma_monitor_group" "forgejo" {
   ]
 }
 
+resource "uptimekuma_monitor_group" "forgejo_webui" {
+  name   = "Forgejo (Web)"
+  parent = uptimekuma_monitor_group.forgejo.id
+  tags = [
+    {
+      tag_id = uptimekuma_tag.forgejo.id
+    }
+  ]
+}
+
+resource "uptimekuma_monitor_group" "forgejo_db" {
+  name   = "Forgejo (PostgreSQL)"
+  parent = uptimekuma_monitor_group.forgejo.id
+  tags = [
+    {
+      tag_id = uptimekuma_tag.forgejo.id
+    }
+  ]
+}
+
+# -------------------------------------------------------------- #
+# | Monitors                                                   | #
+# -------------------------------------------------------------- #
+
 resource "uptimekuma_monitor_ping" "forgejo" {
   name = "Forgejo (Ping)"
 
@@ -33,7 +57,7 @@ resource "uptimekuma_monitor_ping" "forgejo" {
   retry_interval   = 60
   packet_size      = 56
   notification_ids = [var.notification_discord]
-  parent           = uptimekuma_monitor_group.forgejo.id
+  parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
       tag_id = uptimekuma_tag.forgejo.id
@@ -51,7 +75,7 @@ resource "uptimekuma_monitor_http" "forgejo" {
   timeout  = 10
   active   = true
   notification_ids = [var.notification_discord]
-  parent   = uptimekuma_monitor_group.forgejo.id
+  parent   = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
       tag_id = uptimekuma_tag.forgejo.id
@@ -60,4 +84,18 @@ resource "uptimekuma_monitor_http" "forgejo" {
       tag_id = var.tag_http_id
     }
   ]
+}
+
+resource "uptimekuma_monitor_postgres" "forgejo" {
+  name              = "Forgejo (PostgreSQL)"
+  hostname          = var.forgejo_database_hostname
+  port              = var.forgejo_database_port
+  database_user     = var.forgejo_database_user
+  database_password = var.forgejo_database_password
+  database_name     = var.forgejo_database_name
+  interval          = 300
+  timeout           = 10
+  max_retries       = 2
+  active            = true
+  sql_query         = "SELECT 1"
 }
