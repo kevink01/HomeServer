@@ -17,8 +17,8 @@ variable "forgejo_endpoint" {
 }
 
 variable "forgejo_database_hostname" {
-  type     = string
-  nullable = false
+  type      = string
+  nullable  = false
   sensitive = true
 }
 
@@ -28,14 +28,14 @@ variable "forgejo_database_port" {
 }
 
 variable "forgejo_database_user" {
-  type     = string
-  nullable = false
+  type      = string
+  nullable  = false
   sensitive = true
 }
 
 variable "forgejo_database_password" {
-  type     = string
-  nullable = false
+  type      = string
+  nullable  = false
   sensitive = true
 }
 

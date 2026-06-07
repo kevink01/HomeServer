@@ -5,24 +5,24 @@
 ##################################################################
 
 resource "uptimekuma_tag" "http" {
-  name = "HTTP"
+  name  = "HTTP"
   color = "#005b9c"
 }
 
 resource "uptimekuma_tag" "ping" {
-  name = "ping"
+  name  = "ping"
   color = "#000000"
 }
 
 resource "uptimekuma_tag" "postgresql" {
-  name = "PostgreSQL"
-  color ="#2f6792"
-} 
+  name  = "PostgreSQL"
+  color = "#2f6792"
+}
 
 resource "uptimekuma_tag" "docker" {
-  name = "Docker"
-  color ="#2597ee"
-} 
+  name  = "Docker"
+  color = "#2597ee"
+}
 
 resource "uptimekuma_tag" "critical" {
   name  = "Critical"

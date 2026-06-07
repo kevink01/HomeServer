@@ -90,6 +90,6 @@ variable "notification_discord" {
 ##################################################################
 
 variable "docker_default_host" {
-  type= string
+  type     = string
   nullable = false
 }

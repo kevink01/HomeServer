@@ -80,7 +80,7 @@ resource "uptimekuma_monitor_docker" "homepage" {
   interval         = 60
   max_retries      = 2
   notification_ids = [var.notification_discord]
-  parent           = uptimekuma_monitor_group.forgejo.id
+  parent           = uptimekuma_monitor_group.homepage.id
   tags = [
     {
       tag_id = uptimekuma_tag.homepage.id

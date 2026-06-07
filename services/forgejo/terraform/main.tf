@@ -139,13 +139,13 @@ resource "uptimekuma_monitor_docker" "forgejo" {
 resource "uptimekuma_monitor_postgres" "forgejo" {
   name                       = "Forgejo (PostgreSQL)"
   database_connection_string = "postgres://${var.forgejo_database_user}:${var.forgejo_database_password}@${var.forgejo_database_hostname}:${var.forgejo_database_port}/${var.forgejo_database_name}"
-  database_query = "SELECT 1"
+  database_query             = "SELECT 1"
   interval                   = 300
-  retry_interval   = 60
+  retry_interval             = 60
   max_retries                = 2
   active                     = true
-  notification_ids = [var.notification_discord]
-  parent           = uptimekuma_monitor_group.forgejo_db.id
+  notification_ids           = [var.notification_discord]
+  parent                     = uptimekuma_monitor_group.forgejo_db.id
   tags = [
     {
       tag_id = var.tag_cicd_id

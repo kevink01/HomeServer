@@ -15,21 +15,21 @@ module "code_server" {
 }
 
 module "forgejo" {
-  source               = "../services/forgejo/terraform"
-  forgejo_endpoint     = var.forgejo_endpoint
-  docker_default_host = module.uptime-kuma.docker_default_host_id
-  tag_ping_id          = module.uptime-kuma.tag_ping_id
-  tag_http_id          = module.uptime-kuma.tag_http_id
-  tag_postgresql_id = module.uptime-kuma.tag_postgresql_id
-  tag_docker_id = module.uptime-kuma.tag_docker_id
-  tag_cicd_id = module.uptime-kuma.tag_cicd_id
-  group_cicd_id       = module.uptime-kuma.group_cicd_id
-  notification_discord = module.uptime-kuma.notification_discord
+  source                    = "../services/forgejo/terraform"
+  forgejo_endpoint          = var.forgejo_endpoint
+  docker_default_host       = module.uptime-kuma.docker_default_host_id
+  tag_ping_id               = module.uptime-kuma.tag_ping_id
+  tag_http_id               = module.uptime-kuma.tag_http_id
+  tag_postgresql_id         = module.uptime-kuma.tag_postgresql_id
+  tag_docker_id             = module.uptime-kuma.tag_docker_id
+  tag_cicd_id               = module.uptime-kuma.tag_cicd_id
+  group_cicd_id             = module.uptime-kuma.group_cicd_id
+  notification_discord      = module.uptime-kuma.notification_discord
   forgejo_database_hostname = var.forgejo_database_hostname
-  forgejo_database_port = var.forgejo_database_port
-  forgejo_database_user = var.forgejo_database_user
+  forgejo_database_port     = var.forgejo_database_port
+  forgejo_database_user     = var.forgejo_database_user
   forgejo_database_password = var.forgejo_database_password
-  forgejo_database_name = var.forgejo_database_name
+  forgejo_database_name     = var.forgejo_database_name
 }
 
 module "homepage" {
@@ -37,10 +37,10 @@ module "homepage" {
   homepage_endpoint    = var.homepage_endpoint
   tag_ping_id          = module.uptime-kuma.tag_ping_id
   tag_http_id          = module.uptime-kuma.tag_http_id
-  tag_docker_id = module.uptime-kuma.tag_docker_id
+  tag_docker_id        = module.uptime-kuma.tag_docker_id
   group_tools_id       = module.uptime-kuma.group_tools_id
   notification_discord = module.uptime-kuma.notification_discord
-  docker_default_host = module.uptime-kuma.docker_default_host_id
+  docker_default_host  = module.uptime-kuma.docker_default_host_id
 }
 
 module "traefik" {
