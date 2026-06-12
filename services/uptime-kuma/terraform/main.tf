@@ -57,7 +57,7 @@ resource "uptimekuma_tag" "cicd" {
 
 resource "uptimekuma_notification_discord" "discord_notification" {
   name        = "Discord Alerts"
-  webhook_url = "https://discord.com/api/webhooks/1512843400305705022/qeW73fWW2-fu0hlqixb6xxeTNcj0Evit2bo3koq_UXFCgjQqEcGh1ErsNIWn39uI1qRC"
+  webhook_url = var.discord_webhook
   username    = "Uptime Kuma"
   disable_url = false
   is_active   = true

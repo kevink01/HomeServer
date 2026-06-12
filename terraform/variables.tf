@@ -122,3 +122,10 @@ variable "uptime_kuma_password" {
   nullable    = false
   sensitive   = true
 }
+
+variable "discord_webhook" {
+  type = string
+  description = "Webhook URL for Disocrd notifications"
+  nullable = true
+  sensitive = true
+}
