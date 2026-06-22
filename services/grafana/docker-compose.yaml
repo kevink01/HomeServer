@@ -1,0 +1,150 @@
+services:
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    hostname: kkulich.dev
+    labels:  
+      traefik.enable: true
+      traefik.docker.network: grafana_traefik
+      traefik.http.routers.alloy.entrypoints: websecure
+      traefik.http.routers.alloy.tls: true
+      traefik.http.routers.alloy.tls.certresolver: cloudflare
+      traefik.http.routers.alloy.tls.domains[0].main: www.alloy.kkulich.dev
+      traefik.http.routers.alloy.tls.domains[0].sans: alloy.kkulich.dev
+      traefik.http.routers.alloy.rule: Host(`alloy.kkulich.dev`) || Host(`www.alloy.kkulich.dev`)
+      traefik.http.routers.alloy.service: alloy_service
+      traefik.http.services.alloy_service.loadbalancer.server.scheme: http
+      traefik.http.services.alloy_service.loadbalancer.server.port: 12345
+    networks:
+      - grafana_traefik
+    volumes:
+      - ./config/config.alloy:/etc/alloy/config.alloy
+      - /var/log:/var/log:ro
+      - /sys:/sys:ro
+      - /run:/run:ro
+      - /proc:/rootproc:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/:/var/lib/docker/:ro
+      - /run/udev/data:/run/udev/data:ro
+      - alloy_data:/var/lib/alloy/data
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          memory: 512M
+    memswap_limit: -1
+    restart: unless-stopped
+  loki:
+    container_name: loki
+    image: grafana/loki
+    command: "-config.file=/etc/loki/config.yaml"
+    volumes:
+      - ./config/loki.yaml:/etc/loki/config.yaml:ro
+      - loki_data:/loki:rw
+    labels:
+      traefik.enable: true
+      traefik.docker.network: grafana_traefik
+      traefik.http.routers.loki.entrypoints: websecure
+      traefik.http.routers.loki.tls: true
+      traefik.http.routers.loki.tls.certresolver: cloudflare
+      traefik.http.routers.loki.tls.domains[0].main: www.loki.kkulich.dev
+      traefik.http.routers.loki.tls.domains[0].sans: loki.kkulich.dev
+      traefik.http.routers.loki.rule: Host(`loki.kkulich.dev`) || Host(`www.loki.kkulich.dev`)
+      traefik.http.routers.loki.service: loki_service
+      traefik.http.services.loki_service.loadbalancer.server.scheme: http
+      traefik.http.services.loki_service.loadbalancer.server.port: 3100
+    networks:
+      - grafana_traefik
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          memory: 1G
+    memswap_limit: -1
+  prometheus:
+    image: docker.io/prom/prometheus:v3.9.1
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --storage.tsdb.retention.time=15d
+      - --web.enable-remote-write-receiver
+    volumes:
+      - prometheus_data:/prometheus
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+    labels:
+      traefik.enable: true
+      traefik.docker.network: grafana_traefik
+      traefik.http.routers.prometheus.entrypoints: websecure
+      traefik.http.routers.prometheus.tls: true
+      traefik.http.routers.prometheus.tls.certresolver: cloudflare
+      traefik.http.routers.prometheus.tls.domains[0].main: www.prometheus.kkulich.dev
+      traefik.http.routers.prometheus.tls.domains[0].sans: prometheus.kkulich.dev
+      traefik.http.routers.prometheus.rule: Host(`prometheus.kkulich.dev`) || Host(`www.prometheus.kkulich.dev`)
+      traefik.http.routers.prometheus.service: prometheus_service
+      traefik.http.services.prometheus_service.loadbalancer.server.scheme: http
+      traefik.http.services.prometheus_service.loadbalancer.server.port: 9090
+    networks:
+      - grafana_traefik
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 4G
+        reservations:
+          memory: 2G
+    memswap_limit: -1
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
+    labels:
+      traefik.enable: true
+      traefik.docker.network: grafana_traefik
+      traefik.http.routers.grafana.entrypoints: websecure
+      traefik.http.routers.grafana.tls: true
+      traefik.http.routers.grafana.tls.certresolver: cloudflare
+      traefik.http.routers.grafana.tls.domains[0].main: www.grafana.kkulich.dev
+      traefik.http.routers.grafana.tls.domains[0].sans: grafana.kkulich.dev
+      traefik.http.routers.grafana.rule: Host(`grafana.kkulich.dev`) || Host(`www.grafana.kkulich.dev`)
+      traefik.http.routers.grafana.service: grafana_service
+      traefik.http.services.grafana_service.loadbalancer.server.scheme: http
+      traefik.http.services.grafana_service.loadbalancer.server.port: 3000
+    networks:
+      - grafana_traefik
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          memory: 512M
+    memswap_limit: -1
+volumes:
+  grafana_data:
+    driver: local
+    name: grafana_data
+  alloy_data:
+    driver: local
+    name: alloy_data
+  loki_data:
+    driver: local
+    name: loki_data
+  prometheus_data:
+    driver: local
+    name: prometheus_data
+networks:
+  grafana_traefik:
+    external: true

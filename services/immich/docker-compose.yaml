@@ -111,11 +111,7 @@ networks:
     enable_ipv6: false
     attachable: false
   immich_traefik:
-    name: immich_traefik
-    driver: bridge
-    external: false
-    enable_ipv6: true
-    attachable: true
+    external: true
   uptime_postgres_network:
     external: true
 volumes:

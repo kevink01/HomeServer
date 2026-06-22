@@ -2,13 +2,27 @@ global:
   checkNewVersion: false
   sendAnonymousUsage: false
 log:
-  level: DEBUG
+  level: INFO
+  format: json
+  filepath: /var/log/traefik/traefik.log
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+    entryPoint: metrics
 accessLog:
+  filepath: /var/log/traefik/access.log
   format: json
   filters:
     statusCodes:
       - '200'
-      - '400-404'
+      - '400-499'
       - '500-503'
   fields:
     names:
@@ -24,8 +38,20 @@ api:
 entryPoints:
   web:
     address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+    observability:
+      accessLogs: false
+      metrics: false
+      tracing: false
   websecure:
     address: :443
+  metrics:
+    address: ":9090"
 certificatesResolvers:
   cloudflare:
     acme:
