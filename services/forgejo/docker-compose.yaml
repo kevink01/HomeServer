@@ -2,6 +2,15 @@ services:
   forgejo:
     image: codeberg.org/forgejo/forgejo:15
     container_name: forgejo
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    memswap_limit: -1
     env_file:
       - .env
     environment:
@@ -52,6 +61,7 @@ services:
         limits:
           memory: 2G
           cpus: '1.0'
+    memswap_limit: -1
     env_file:
       - .env
     networks:
