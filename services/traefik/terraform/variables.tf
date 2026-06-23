@@ -43,7 +43,15 @@ variable "group_network_id" {
 ## ------------------------------------------------------------ ##
 ##################################################################
 
-variable "notification_discord" {
+variable "discord_ping_webhook" {
+  type = number
+}
+
+variable "discord_docker_webhook" {
+  type = number
+}
+
+variable "discord_traefik_webhook" {
   type = number
 }
 

@@ -55,9 +55,36 @@ resource "uptimekuma_tag" "cicd" {
 ## ------------------------------------------------------------ ##
 ##################################################################
 
-resource "uptimekuma_notification_discord" "discord_notification" {
-  name        = "Discord Alerts"
-  webhook_url = var.discord_webhook
+resource "uptimekuma_notification_discord" "discord_ping_notification" {
+  name        = "[Ping] - Discord Webhook"
+  webhook_url = var.discord_ping_webhook
+  username    = "Uptime Kuma"
+  disable_url = false
+  is_active   = true
+  is_default  = true
+}
+
+resource "uptimekuma_notification_discord" "discord_docker_notification" {
+  name        = "[Docker] - Discord Webhook"
+  webhook_url = var.discord_docker_webhook
+  username    = "Uptime Kuma"
+  disable_url = false
+  is_active   = true
+  is_default  = true
+}
+
+resource "uptimekuma_notification_discord" "discord_postgres_notification" {
+  name        = "[Postgres] - Discord Webhook"
+  webhook_url = var.discord_postgres_webhook
+  username    = "Uptime Kuma"
+  disable_url = false
+  is_active   = true
+  is_default  = true
+}
+
+resource "uptimekuma_notification_discord" "discord_traefik_notification" {
+  name        = "[Traefik] - Discord Webhook"
+  webhook_url = var.discord_traefik_webhook
   username    = "Uptime Kuma"
   disable_url = false
   is_active   = true
@@ -120,7 +147,7 @@ resource "uptimekuma_monitor_ping" "gitlab" {
   max_retries      = 2
   retry_interval   = 60
   packet_size      = 56
-  notification_ids = [uptimekuma_notification_discord.discord_notification.id]
+  notification_ids = [uptimekuma_notification_discord.discord_ping_notification.id]
   parent           = uptimekuma_monitor_group.cicd.id
   tags = [
     {
@@ -139,32 +166,4 @@ resource "uptimekuma_docker_host" "docker_default_host" {
   name          = "Docker Host"
   docker_daemon = "/var/run/docker.sock"
   docker_type   = "socket"
-}
-
-##################################################################
-## ------------------------------------------------------------ ##
-## | Status Page                                              | ##
-## ------------------------------------------------------------ ##
-##################################################################
-
-resource "uptimekuma_status_page" "home_status_page" {
-  slug                    = "home"
-  title                   = "All Services Status Page"
-  description             = "Status page for all production services"
-  published               = true
-  theme                   = "dark"
-  show_certificate_expiry = true
-  show_tags               = true
-  public_group_list = [
-    {
-      name   = "Production Services"
-      weight = 1
-      monitor_list = [
-        {
-          id       = uptimekuma_monitor_ping.gitlab.id
-          send_url = true
-        }
-      ]
-    }
-  ]
 }

@@ -79,7 +79,19 @@ variable "group_cicd_id" {
 ## ------------------------------------------------------------ ##
 ##################################################################
 
-variable "notification_discord" {
+variable "discord_ping_webhook" {
+  type = number
+}
+
+variable "discord_docker_webhook" {
+  type = number
+}
+
+variable "discord_postgres_webhook" {
+  type = number
+}
+
+variable "discord_traefik_webhook" {
   type = number
 }
 

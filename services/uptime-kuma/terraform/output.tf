@@ -47,8 +47,20 @@ output "tag_tools_id" {
 ## ------------------------------------------------------------ ##
 ##################################################################
 
-output "notification_discord" {
-  value = uptimekuma_notification_discord.discord_notification.id
+output "ping_discord_webhook" {
+  value = uptimekuma_notification_discord.discord_ping_notification.id
+}
+
+output "docker_discord_webhook" {
+  value = uptimekuma_notification_discord.discord_docker_notification.id
+}
+
+output "postgres_discord_webhook" {
+  value = uptimekuma_notification_discord.discord_postgres_notification.id
+}
+
+output "traefik_discord_webhook" {
+  value = uptimekuma_notification_discord.discord_traefik_notification.id
 }
 
 ##################################################################

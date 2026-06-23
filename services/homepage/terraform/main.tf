@@ -43,7 +43,7 @@ resource "uptimekuma_monitor_ping" "homepage" {
   max_retries      = 2
   retry_interval   = 60
   packet_size      = 64
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_ping_webhook]
   parent           = uptimekuma_monitor_group.homepage.id
   tags = [
     {
@@ -62,6 +62,7 @@ resource "uptimekuma_monitor_http" "homepage" {
   timeout  = 10
   active   = true
   parent   = uptimekuma_monitor_group.homepage.id
+  notification_ids = [var.discord_traefik_webhook]
   tags = [
     {
       tag_id = uptimekuma_tag.homepage.id
@@ -79,7 +80,7 @@ resource "uptimekuma_monitor_docker" "homepage" {
   docker_container = "homepage"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.homepage.id
   tags = [
     {

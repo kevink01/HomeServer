@@ -74,7 +74,7 @@ resource "uptimekuma_monitor_ping" "immich" {
   max_retries      = 2
   retry_interval   = 60
   packet_size      = 56
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_ping_webhook]
   parent           = uptimekuma_monitor_group.immich_webui.id
   tags = [
     {
@@ -95,7 +95,7 @@ resource "uptimekuma_monitor_http" "immich" {
   interval         = 60
   timeout          = 10
   active           = true
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_traefik_webhook]
   parent           = uptimekuma_monitor_group.immich_webui.id
   tags = [
     {
@@ -117,7 +117,7 @@ resource "uptimekuma_monitor_docker" "immich" {
   docker_container = "immich_ui"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.immich_webui.id
   tags = [
     {
@@ -144,7 +144,7 @@ resource "uptimekuma_monitor_postgres" "immich" {
   retry_interval             = 60
   max_retries                = 2
   active                     = true
-  notification_ids           = [var.notification_discord]
+  notification_ids           = [var.discord_postgres_webhook]
   parent                     = uptimekuma_monitor_group.immich_db.id
   tags = [
     {
@@ -166,7 +166,7 @@ resource "uptimekuma_monitor_docker" "immich_postgres" {
   docker_container = "immich_postgres"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.immich_db.id
   tags = [
     {

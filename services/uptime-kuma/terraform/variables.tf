@@ -18,7 +18,28 @@ variable "uptime_kuma_password" {
   sensitive   = true
 }
 
-variable "discord_webhook" {
+variable "discord_ping_webhook" {
+  type = string
+  description = "Webhook URL for Disocrd notifications"
+  nullable = true
+  sensitive = true
+}
+
+variable "discord_docker_webhook" {
+  type = string
+  description = "Webhook URL for Disocrd notifications"
+  nullable = true
+  sensitive = true
+}
+
+variable "discord_postgres_webhook" {
+  type = string
+  description = "Webhook URL for Disocrd notifications"
+  nullable = true
+  sensitive = true
+}
+
+variable "discord_traefik_webhook" {
   type = string
   description = "Webhook URL for Disocrd notifications"
   nullable = true

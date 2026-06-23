@@ -44,7 +44,7 @@ resource "uptimekuma_monitor_ping" "traefik" {
   max_retries      = 2
   retry_interval   = 60
   packet_size      = 56
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_ping_webhook]
   parent           = uptimekuma_monitor_group.traefik.id
   tags = [
     {
@@ -66,6 +66,7 @@ resource "uptimekuma_monitor_http" "traefik" {
   timeout  = 10
   active   = true
   parent   = uptimekuma_monitor_group.traefik.id
+  notification_ids = [var.discord_traefik_webhook]
   tags = [
     {
       tag_id = uptimekuma_tag.traefik.id

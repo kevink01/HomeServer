@@ -74,7 +74,7 @@ resource "uptimekuma_monitor_ping" "forgejo" {
   max_retries      = 2
   retry_interval   = 60
   packet_size      = 56
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_ping_webhook]
   parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
@@ -95,7 +95,7 @@ resource "uptimekuma_monitor_http" "forgejo" {
   interval         = 60
   timeout          = 10
   active           = true
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_traefik_webhook]
   parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
@@ -117,7 +117,7 @@ resource "uptimekuma_monitor_docker" "forgejo" {
   docker_container = "forgejo"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.forgejo_webui.id
   tags = [
     {
@@ -144,7 +144,7 @@ resource "uptimekuma_monitor_postgres" "forgejo" {
   retry_interval             = 60
   max_retries                = 2
   active                     = true
-  notification_ids           = [var.notification_discord]
+  notification_ids           = [var.discord_postgres_webhook]
   parent                     = uptimekuma_monitor_group.forgejo_db.id
   tags = [
     {
@@ -166,7 +166,7 @@ resource "uptimekuma_monitor_docker" "forgejo_postgres" {
   docker_container = "forgejo_postgres"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.forgejo_db.id
   tags = [
     {
@@ -192,7 +192,7 @@ resource "uptimekuma_monitor_docker" "forgejo_runner" {
   docker_container = "forgejo-runner"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.forgejo.id
   tags = [
     {
@@ -218,7 +218,7 @@ resource "uptimekuma_monitor_docker" "forgejo_dind" {
   docker_container = "forgejo-dind"
   interval         = 60
   max_retries      = 2
-  notification_ids = [var.notification_discord]
+  notification_ids = [var.discord_docker_webhook]
   parent           = uptimekuma_monitor_group.forgejo.id
   tags = [
     {
