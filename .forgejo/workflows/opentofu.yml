@@ -42,12 +42,23 @@ jobs:
           tofu_version: 1.6.0
           token: ${{ secrets.ACTIONS_TOKEN }}
       
-      - name: Sanity Check Secrets
+      - name: Debug Secrets vs Variables
         run: |
-          echo "Discord1 length: ${#TF_VAR_discord_ping_webhook}"
-          if [ ${#TF_VAR_discord_ping_webhook} -eq 0 ]; then
-            echo "::error:: TF_VAR_discord_ping_webhook is empty!"
-          fi
+          echo "--- Debugging Configuration ---"
+          
+          # Check Secret (Masked in logs, so we check length)
+          # If this returns 0, the secret is not reaching the runner.
+          SECRET_VAL="${{ secrets.TEST_TOKEN }}"
+          echo "TEST_TOKEN length: ${#SECRET_VAL}"
+          
+          # Check Variable (Visible in logs)
+          # If this is empty, your runner is not fetching repo variables.
+          VAR_VAL="${{ vars.TEST_VARIABLE }}"
+          echo "TEST_VARIABLE value: $VAR_VAL"
+          
+          # Verify environment
+          echo "--- Environment Dump ---"
+          env | grep TEST_
 
       - name: Tofu Format
         run: tofu fmt -check
