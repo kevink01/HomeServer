@@ -68,6 +68,7 @@ jobs:
           TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
           TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
         run: |
+          export TF_VAR_uptime_kuma_username=${{secrets.TF_VAR_UPTIME_KUMA_USERNAME}}
           echo "Testing variable presence:"
           # Use this to see if the variable is even reaching the shell
           if [ -z "$TF_VAR_uptime_kuma_username" ]; then
