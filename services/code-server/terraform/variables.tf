@@ -40,23 +40,14 @@ variable "group_tools_id" {
 ##################################################################
 
 variable "discord_ping_webhook" {
-  type = string
-  description = "Webhook URL for Disocrd notifications"
-  nullable = true
-  sensitive = true
+  type = number
 }
 
 variable "discord_docker_webhook" {
-  type = string
-  description = "Webhook URL for Disocrd notifications"
-  nullable = true
-  sensitive = true
+  type = number
 }
 
 variable "discord_traefik_webhook" {
-  type = string
-  description = "Webhook URL for Disocrd notifications"
-  nullable = true
-  sensitive = true
+  type = number
 }
 
