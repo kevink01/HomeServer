@@ -41,6 +41,21 @@ jobs:
         with:
           tofu_version: 1.6.0
           token: ${{ secrets.ACTIONS_TOKEN }}
+      
+            - name: Setup environment variables
+        run: |
+          export TF_VAR_discord_ping_webhook=${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
+          export TF_VAR_discord_docker_webhook=${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
+          export TF_VAR_discord_postgres_webhook=${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
+          export TF_VAR_discord_postgres_webhook=${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
+          export TF_VAR_uptime_kuma_username=${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
+          export TF_VAR_uptime_kuma_password=${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
+          export TF_VAR_forgejo_database_hostname=${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
+          export TF_VAR_forgejo_database_user=${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
+          export TF_VAR_forgejo_database_password=${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
+          export TF_VAR_immich_database_hostname=${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
+          export TF_VAR_immich_database_user=${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
+          export TF_VAR_immich_database_password=${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
 
       - name: Tofu Format
         run: tofu fmt -check
@@ -52,32 +67,6 @@ jobs:
       - name: Tofu Validate
         run: tofu validate
         working-directory: ./terraform
-      
-      - name: Debug Environment Variables
-        env:
-          TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-          TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
-          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
-          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
-          TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
-          TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
-          TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
-          TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
-          TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
-          TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
-          TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
-          TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
-        run: |
-          export TF_VAR_uptime_kuma_username=${{secrets.TF_VAR_UPTIME_KUMA_USERNAME}}
-          echo "Testing variable presence:"
-          # Use this to see if the variable is even reaching the shell
-          if [ -z "$TF_VAR_uptime_kuma_username" ]; then
-            echo "TF_VAR_uptime_kuma_username is empty"
-          else
-            echo "TF_VAR_uptime_kuma_username is set"
-          fi
-          # Print the environment to see what is actually loaded
-          env
 
       #- name: Tofu Security Scan
        # uses: https://www.forgejo.kkulich.dev/actions/trivy-action@v0.36.0
