@@ -14,19 +14,10 @@ jobs:
       contents: read
       pull-requests: write
     env:
-      TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-      TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
-      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
-      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
-      TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
-      TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
-      TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
-      TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
-      TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
-      TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
-      TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
-      TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
-
+      TF_VAR_discord1: ${{ secrets.TF_VAR_DISCORD1 }}
+      TF_VAR_discord2: ${{ secrets.TF_VAR_DISCORD2 }}
+      TF_VAR_discord3: ${{ secrets.TF_VAR_DISCORD3 }}
+      TF_VAR_discord4: ${{ secrets.TF_VAR_DISCORD4 }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,20 +33,12 @@ jobs:
           tofu_version: 1.6.0
           token: ${{ secrets.ACTIONS_TOKEN }}
       
-      - name: Setup environment variables
+      - name: Sanity Check Secrets
         run: |
-          export TF_VAR_discord_ping_webhook=${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-          export TF_VAR_discord_docker_webhook=${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
-          export TF_VAR_discord_postgres_webhook=${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
-          export TF_VAR_discord_postgres_webhook=${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
-          export TF_VAR_uptime_kuma_username=${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
-          export TF_VAR_uptime_kuma_password=${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
-          export TF_VAR_forgejo_database_hostname=${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
-          export TF_VAR_forgejo_database_user=${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
-          export TF_VAR_forgejo_database_password=${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
-          export TF_VAR_immich_database_hostname=${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
-          export TF_VAR_immich_database_user=${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
-          export TF_VAR_immich_database_password=${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
+          echo "Discord1 length: ${#TF_VAR_discord1}"
+          if [ ${#TF_VAR_discord1} -eq 0 ]; then
+            echo "::error:: TF_VAR_discord1 is empty!"
+          fi
 
       - name: Tofu Format
         run: tofu fmt -check
