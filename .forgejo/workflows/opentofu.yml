@@ -13,19 +13,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    env:
-      TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-      TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
-      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
-      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
-      TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
-      TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
-      TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
-      TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
-      TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
-      TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
-      TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
-      TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -78,8 +65,23 @@ jobs:
           #skip-setup-trivy: true
 
       - name: Tofu Plan
+        env:
+          TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
+          TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
+          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
+          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
+          TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
+          TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
+          TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
+          TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
+          TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
+          TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
+          TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
+          TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
         run: |
-          echo "$TF_VAR_uptime_kuma_username"
+          # Verify they are here
+          echo "Debug: TF_VAR_discord_ping_webhook is ${#TF_VAR_discord_ping_webhook} chars long"
+          echo "Debug: TF_VAR_discord_docker_webhook is ${#TF_VAR_discord_docker_webhook} chars long"
           tofu plan -no-color
         working-directory: ./terraform
 
