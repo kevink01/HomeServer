@@ -1,0 +1,87 @@
+name: 'Terraform CI/CD'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  terraform:
+    name: 'Terraform Pipeline'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Manual Trivy Installation
+        run: |
+          # Adjust this URL if you need a specific version/platform
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.71.0
+
+      - name: Setup Terraform
+        uses: https://www.forgejo.kkulich.dev/actions/setup-opentofu@v2
+        with:
+          tofu_version: 1.6.0
+          token: ${{ secrets.ACTIONS_TOKEN }}
+
+      - name: Tofu Format
+        run: tofu fmt -check
+
+      - name: Tofu Init
+        run: tofu init
+
+      - name: Tofu Validate
+        run: tofu validate
+
+      #- name: Tofu Security Scan
+       # uses: https://www.forgejo.kkulich.dev/actions/trivy-action@v0.36.0
+        #with:
+         # token: ${{ secrets.ACTIONS_TOKEN }}
+          #skip-setup-trivy: true
+
+      - name: Tofu Plan
+        if: github.event_name == 'pull_request'
+        run: tofu plan -no-color
+        continue-on-error: true
+
+      - name: Add Plan Comment
+        if: github.event_name == 'pull_request'
+        uses: https://www.forgejo.kkulich.dev/actions/github-script@v9
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          script: |
+            const output = `#### OpenTofu Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`hcl
+            ${process.env.PLAN}
+            \`\`\`
+            </details>
+            *Pushed by: @${{ github.actor }}*`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Tofu Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TF_VAR_DISCORD_PING_WEBHOOK: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
+          TF_VAR_DISCORD_DOCKER_WEBHOOK: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
+          TF_VAR_DISCORD_POSTGRES_WEBHOOK: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
+          TF_VAR_DISCORD_TRAEFIK_WEBHOOK: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
+          TF_VAR_UPTIME_KUMA_USERNAME: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
+          TF_VAR_UPTIME_KUMA_PASSWORD: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
+          TF_VAR_FORGEJO_DATABASE_HOSTNAME: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
+          TF_VAR_FORGEJO_DATABASE_USER: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
+          TF_VAR_FORGEJO_DATABASE_PASSWORD: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
+          TF_VAR_IMMICH_DATABASE_HOSTNAME: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
+          TF_VAR_IMMICH_DATABASE_USER: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
+          TF_VAR_IMMICH_DATABASE_PASSWORD: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
+        run: tofu apply -auto-approve

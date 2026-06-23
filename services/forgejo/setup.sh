@@ -4,7 +4,7 @@ ENV_FILE=".env"
 
 if [ ! -f "$ENV_FILE" ]; then
     echo ".env file not found. Creating a new one..."
-    RANDOM_PASS=$(LC_ALL=C tr -dc 'A-Za-z0-9!@#%^&*()-_=+' < /dev/urandom | head -c 32)
+    RANDOM_PASS=$(LC_ALL=tr -dc 'A-Za-z0-9!@#%^&*()-_=+' < /dev/urandom | head -c 32)
 
     {
         echo "POSTGRES_DB=forgejo"
