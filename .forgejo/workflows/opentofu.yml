@@ -1,4 +1,4 @@
-name: 'Terraform CI/CD'
+name: 'OpenTofu CI/CD'
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  terraform:
-    name: 'Terraform Pipeline'
+  opentofu:
+    name: 'OpenTofu Pipeline'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,7 +23,7 @@ jobs:
           # Adjust this URL if you need a specific version/platform
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.71.0
 
-      - name: Setup Terraform
+      - name: Setup OpenTofu
         uses: https://www.forgejo.kkulich.dev/actions/setup-opentofu@v2
         with:
           tofu_version: 1.6.0
@@ -45,7 +45,6 @@ jobs:
           #skip-setup-trivy: true
 
       - name: Tofu Plan
-        if: github.event_name == 'pull_request'
         run: tofu plan -no-color
         continue-on-error: true
 
