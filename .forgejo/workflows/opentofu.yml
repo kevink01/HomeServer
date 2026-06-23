@@ -14,10 +14,19 @@ jobs:
       contents: read
       pull-requests: write
     env:
-      TF_VAR_discord1: ${{ secrets.TF_VAR_DISCORD1 }}
-      TF_VAR_discord2: ${{ secrets.TF_VAR_DISCORD2 }}
-      TF_VAR_discord3: ${{ secrets.TF_VAR_DISCORD3 }}
-      TF_VAR_discord4: ${{ secrets.TF_VAR_DISCORD4 }}
+      TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
+      TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
+      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
+      TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
+      TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
+      TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
+      TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
+      TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
+      TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
+      TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
+      TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
+      TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,9 +44,9 @@ jobs:
       
       - name: Sanity Check Secrets
         run: |
-          echo "Discord1 length: ${#TF_VAR_discord1}"
-          if [ ${#TF_VAR_discord1} -eq 0 ]; then
-            echo "::error:: TF_VAR_discord1 is empty!"
+          echo "Discord1 length: ${#TF_VAR_discord_ping_webhook}"
+          if [ ${#TF_VAR_discord_ping_webhook} -eq 0 ]; then
+            echo "::error:: TF_VAR_discord_ping_webhook is empty!"
           fi
 
       - name: Tofu Format
