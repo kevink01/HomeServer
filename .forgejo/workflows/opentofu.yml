@@ -34,9 +34,11 @@ jobs:
 
       - name: Tofu Init
         run: tofu init
+        working-directory: ./terraform
 
       - name: Tofu Validate
         run: tofu validate
+        working-directory: ./terraform
 
       #- name: Tofu Security Scan
        # uses: https://www.forgejo.kkulich.dev/actions/trivy-action@v0.36.0
@@ -46,7 +48,7 @@ jobs:
 
       - name: Tofu Plan
         run: tofu plan -no-color
-        continue-on-error: true
+        working-directory: ./terraform
 
       - name: Add Plan Comment
         if: github.event_name == 'pull_request'
@@ -84,3 +86,4 @@ jobs:
           TF_VAR_IMMICH_DATABASE_USER: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
           TF_VAR_IMMICH_DATABASE_PASSWORD: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
         run: tofu apply -auto-approve
+        working-directory: ./terraform
