@@ -52,6 +52,18 @@ jobs:
       - name: Tofu Validate
         run: tofu validate
         working-directory: ./terraform
+      
+      - name: Debug Environment Variables
+        run: |
+          echo "Testing variable presence:"
+          # Use this to see if the variable is even reaching the shell
+          if [ -z "$TF_VAR_uptime_kuma_username" ]; then
+            echo "TF_VAR_uptime_kuma_username is empty"
+          else
+            echo "TF_VAR_uptime_kuma_username is set"
+          fi
+          # Print the environment to see what is actually loaded
+          env
 
       #- name: Tofu Security Scan
        # uses: https://www.forgejo.kkulich.dev/actions/trivy-action@v0.36.0
