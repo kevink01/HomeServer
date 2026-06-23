@@ -60,7 +60,9 @@ jobs:
           #skip-setup-trivy: true
 
       - name: Tofu Plan
-        run: tofu plan -no-color
+        script: |
+          echo "$TF_VAR_uptime_kuma_username"
+          tofu plan -no-color
         working-directory: ./terraform
 
       - name: Add Plan Comment
