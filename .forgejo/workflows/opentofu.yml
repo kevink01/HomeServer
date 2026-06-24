@@ -29,23 +29,31 @@ jobs:
           tofu_version: 1.6.0
           token: ${{ secrets.ACTIONS_TOKEN }}
       
-      - name: Debug Secrets vs Variables
+      - name: Setup Tofu Variables
         run: |
-          echo "--- Debugging Configuration ---"
-          
-          # Check Secret (Masked in logs, so we check length)
-          # If this returns 0, the secret is not reaching the runner.
-          SECRET_VAL="${{ secrets.TEST_TOKEN }}"
-          echo "TEST_TOKEN length: ${#SECRET_VAL}"
-          
-          # Check Variable (Visible in logs)
-          # If this is empty, your runner is not fetching repo variables.
-          VAR_VAL="${{ vars.TEST_VARIABLE }}"
-          echo "TEST_VARIABLE value: $VAR_VAL"
-          
-          # Verify environment
-          echo "--- Environment Dump ---"
-          env | grep TEST_
+          # Define the variables as a space-separated list
+          VARS=(
+          "TF_VAR_discord_ping_webhook:${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
+          "TF_VAR_discord_docker_webhook:${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
+          "TF_VAR_discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
+          "TF_VAR_discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
+          "TF_VAR_uptime_kuma_username:${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
+          "TF_VAR_uptime_kuma_password:${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
+          "TF_VAR_forgejo_database_hostname:${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
+          "TF_VAR_forgejo_database_user:${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
+          "TF_VAR_forgejo_database_password:${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
+          "TF_VAR_immich_database_hostname:${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
+          "TF_VAR_immich_database_user:${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
+          "TF_VAR_immich_database_password:${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}")
+
+          # Build the string dynamically
+          FLAGS=""
+          for var in "${VARS[@]}"; do
+            FLAGS="$FLAGS -var='${var/:/=}'"
+          done
+
+          # Output to GITHUB_ENV
+          echo "TF_FLAGS=$FLAGS" >> $GITHUB_ENV
 
       - name: Tofu Format
         run: tofu fmt -check
@@ -65,28 +73,7 @@ jobs:
           #skip-setup-trivy: true
 
       - name: Tofu Plan
-        env:
-          TF_VAR_discord_ping_webhook: ${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-          TF_VAR_discord_docker_webhook: ${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}
-          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}
-          TF_VAR_discord_postgres_webhook: ${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}
-          TF_VAR_uptime_kuma_username: ${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}
-          TF_VAR_uptime_kuma_password: ${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}
-          TF_VAR_forgejo_database_hostname: ${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}
-          TF_VAR_forgejo_database_user: ${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}
-          TF_VAR_forgejo_database_password: ${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}
-          TF_VAR_immich_database_hostname: ${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}
-          TF_VAR_immich_database_user: ${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}
-          TF_VAR_immich_database_password: ${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}
-        run: |
-          SECRET_VAL="${{ secrets.TEST_TOKEN }}"
-          echo "TEST_TOKEN length: ${#SECRET_VAL}"
-          SECRET_TF_VAL=${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}
-          echo "SECRET_TF_VAL length: ${#SECRET_TF_VAL}"
-          # Verify they are here
-          echo "Debug: TF_VAR_discord_ping_webhook is ${#TF_VAR_discord_ping_webhook} chars long"
-          echo "Debug: TF_VAR_discord_docker_webhook is ${#TF_VAR_discord_docker_webhook} chars long"
-          tofu plan -no-color
+        run: tofu plan -no-color $TF_FLAGS
         working-directory: ./terraform
 
       - name: Add Plan Comment
@@ -111,5 +98,5 @@ jobs:
 
       - name: Tofu Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: tofu apply -auto-approve
+        run: tofu apply -auto-approve $TF_FLAGS
         working-directory: ./terraform
