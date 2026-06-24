@@ -34,7 +34,7 @@ jobs:
           # Define the variables as a space-separated list
           VARS=(
           "discord_ping_webhook:${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
-          "discord_docker_webhook:${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
+          "discord_docker_webhook:${{ secrets.DISCORD_DOCKER_WEBHOOK }}"
           "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
           "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
           "uptime_kuma_username:${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
