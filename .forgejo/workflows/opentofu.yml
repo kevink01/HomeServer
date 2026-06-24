@@ -65,7 +65,7 @@ jobs:
 
       - name: Tofu Plan
         run: |
-          export TF_LOG=TRACE
+          ping -c 3 https://www.uptime.kkulich.dev
           tofu plan -no-color
         working-directory: ./terraform
 
