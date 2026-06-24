@@ -35,7 +35,7 @@ jobs:
           discord_ping_webhook = "{{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
           discord_docker_webhook = "{{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
           discord_postgres_webhook = "{{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
-          discord_postgres_webhook = "{{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
+          discord_traefik_webhook = "{{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
           uptime_kuma_username = "{{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
           uptime_kuma_password = "{{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
           forgejo_database_hostname = "{{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
@@ -65,8 +65,7 @@ jobs:
 
       - name: Tofu Plan
         run: |
-          echo $TF_FLAGS
-          tofu plan -no-color $TF_FLAGS
+          tofu plan -no-color
         working-directory: ./terraform
 
       - name: Add Plan Comment
