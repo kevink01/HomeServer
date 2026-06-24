@@ -33,18 +33,18 @@ jobs:
         run: |
           # Define the variables as a space-separated list
           VARS=(
-          "TF_VAR_discord_ping_webhook:${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
-          "TF_VAR_discord_docker_webhook:${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
-          "TF_VAR_discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
-          "TF_VAR_discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
-          "TF_VAR_uptime_kuma_username:${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
-          "TF_VAR_uptime_kuma_password:${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
-          "TF_VAR_forgejo_database_hostname:${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
-          "TF_VAR_forgejo_database_user:${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
-          "TF_VAR_forgejo_database_password:${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
-          "TF_VAR_immich_database_hostname:${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
-          "TF_VAR_immich_database_user:${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
-          "TF_VAR_immich_database_password:${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}")
+          "discord_ping_webhook:${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
+          "discord_docker_webhook:${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
+          "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
+          "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
+          "uptime_kuma_username:${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
+          "uptime_kuma_password:${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
+          "forgejo_database_hostname:${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
+          "forgejo_database_user:${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
+          "forgejo_database_password:${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
+          "immich_database_hostname:${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
+          "immich_database_user:${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
+          "immich_database_password:${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}")
 
           # Build the string dynamically
           FLAGS=""
