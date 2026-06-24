@@ -53,6 +53,7 @@ jobs:
           done
 
           # Output to GITHUB_ENV
+          echo "$FLAGS"
           echo "TF_FLAGS=$FLAGS" >> $GITHUB_ENV
 
       - name: Tofu Format
