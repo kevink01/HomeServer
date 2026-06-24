@@ -76,7 +76,7 @@ jobs:
       - name: Tofu Plan
         run: |
           echo $TF_FLAGS
-          tofu plan -no-color $TF_FLAGS
+          tofu plan -var="discord_docker_webhook=debug" -no-color $TF_FLAGS
         working-directory: ./terraform
 
       - name: Add Plan Comment
