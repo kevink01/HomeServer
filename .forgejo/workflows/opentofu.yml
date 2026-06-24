@@ -31,30 +31,20 @@ jobs:
       
       - name: Setup Tofu Variables
         run: |
-          # Define the variables as a space-separated list
-          VARS=(
-          "discord_ping_webhook:${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
-          "discord_docker_webhook:${{ secrets.DISCORD_DOCKER_WEBHOOK }}"
-          "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
-          "discord_postgres_webhook:${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
-          "uptime_kuma_username:${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
-          "uptime_kuma_password:${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
-          "forgejo_database_hostname:${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
-          "forgejo_database_user:${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
-          "forgejo_database_password:${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
-          "immich_database_hostname:${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
-          "immich_database_user:${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
-          "immich_database_password:${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}")
-
-          # Build the string dynamically
-          FLAGS=""
-          for var in "${VARS[@]}"; do
-            FLAGS="$FLAGS -var=\"${var/:/=}\""
-          done
-
-          # Output to GITHUB_ENV
-          echo "$FLAGS"
-          echo "TF_FLAGS=$FLAGS" >> $GITHUB_ENV
+          cat <<EOF > ./terraform/secrets.auto.tfvars
+          discord_ping_webhook = "{{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
+          discord_docker_webhook = "{{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
+          discord_postgres_webhook = "{{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
+          discord_postgres_webhook = "{{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
+          uptime_kuma_username = "{{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
+          uptime_kuma_password = "{{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
+          forgejo_database_hostname = "{{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
+          forgejo_database_user = "{{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
+          forgejo_database_password = "{{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
+          immich_database_hostname = "{{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
+          immich_database_user = "{{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
+          immich_database_password = "{{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}"
+          EOF
 
       - name: Tofu Format
         run: tofu fmt -check
@@ -98,8 +88,10 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-
       - name: Tofu Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: tofu apply -auto-approve $TF_FLAGS
         working-directory: ./terraform
+      - name: Cleanup Secrets
+        if: always()
+        run: rm -f ./terraform/secrets.auto.tfvars
