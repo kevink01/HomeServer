@@ -10,6 +10,9 @@ jobs:
   opentofu:
     name: 'OpenTofu Pipeline'
     runs-on: ubuntu-latest
+    container:
+      volumes:
+        - /mnt/user/appdata/terraform/terraform.tfstate:/mnt/user/appdata/terraform/terraform.tfstate
     permissions:
       contents: read
       pull-requests: write
