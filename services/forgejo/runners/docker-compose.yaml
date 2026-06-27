@@ -23,6 +23,7 @@ services:
       DOCKER_HOST: tcp://docker-in-docker:2375
     volumes:
       - /mnt/user/appdata/forgejo-runners/data:/data
+      - /mnt/user/appdata/terraform/terraform.tfstate:/mnt/user/appdata/terraform/terraform.tfstate:rw
       #- /mnt/user/appdata/forgejo-runners/config.yaml:/config.yaml
     user: 1001:1001
     command: 'forgejo-runner daemon --config runner-config.yml'
