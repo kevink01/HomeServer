@@ -65,7 +65,7 @@ jobs:
 
       - name: Tofu Plan
         run: |
-          curl https://www.uptime.kkulich.dev
+          export TF_LOG_PROVIDER=TRACE
           tofu plan -no-color
         working-directory: ./terraform
 
