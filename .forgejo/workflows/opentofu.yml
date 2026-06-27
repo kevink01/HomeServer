@@ -32,18 +32,18 @@ jobs:
       - name: Setup Tofu Variables
         run: |
           cat <<EOF > ./terraform/secrets.auto.tfvars
-          discord_ping_webhook = "{{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
-          discord_docker_webhook = "{{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
-          discord_postgres_webhook = "{{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
-          discord_traefik_webhook = "{{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
-          uptime_kuma_username = "{{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
-          uptime_kuma_password = "{{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
-          forgejo_database_hostname = "{{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
-          forgejo_database_user = "{{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
-          forgejo_database_password = "{{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
-          immich_database_hostname = "{{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
-          immich_database_user = "{{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
-          immich_database_password = "{{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}"
+          discord_ping_webhook = "${{ secrets.TF_VAR_DISCORD_PING_WEBHOOK }}"
+          discord_docker_webhook = "${{ secrets.TF_VAR_DISCORD_DOCKER_WEBHOOK }}"
+          discord_postgres_webhook = "${{ secrets.TF_VAR_DISCORD_POSTGRES_WEBHOOK }}"
+          discord_traefik_webhook = "${{ secrets.TF_VAR_DISCORD_TRAEFIK_WEBHOOK }}"
+          uptime_kuma_username = "${{ secrets.TF_VAR_UPTIME_KUMA_USERNAME }}"
+          uptime_kuma_password = "${{ secrets.TF_VAR_UPTIME_KUMA_PASSWORD }}"
+          forgejo_database_hostname = "${{ secrets.TF_VAR_FORGEJO_DATABASE_HOSTNAME }}"
+          forgejo_database_user = "${{ secrets.TF_VAR_FORGEJO_DATABASE_USER }}"
+          forgejo_database_password = "${{ secrets.TF_VAR_FORGEJO_DATABASE_PASSWORD }}"
+          immich_database_hostname = "${{ secrets.TF_VAR_IMMICH_DATABASE_HOSTNAME }}"
+          immich_database_user = "${{ secrets.TF_VAR_IMMICH_DATABASE_USER }}"
+          immich_database_password = "${{ secrets.TF_VAR_IMMICH_DATABASE_PASSWORD }}"
           EOF
 
       - name: Tofu Format
