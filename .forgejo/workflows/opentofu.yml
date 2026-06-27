@@ -68,7 +68,6 @@ jobs:
 
       - name: Tofu Plan
         run: |
-          export TF_LOG_PROVIDER=TRACE
           tofu plan -no-color
         working-directory: ./terraform
 
